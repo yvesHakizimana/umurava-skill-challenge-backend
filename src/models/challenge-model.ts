@@ -1,6 +1,6 @@
-import {Schema, model} from "mongoose";
+import {Schema, model,Document} from "mongoose";
 
-export interface IChallenge {
+export interface IChallenge extends Document{
     title: string
     deadline: Date
     moneyPrize: string
@@ -9,7 +9,7 @@ export interface IChallenge {
     projectDescription: string[]
     projectRequirements: string[]
     deliverables: string[],
-    createdBy: Schema.Types.ObjectId
+    // createdBy: Schema.Types.ObjectId
 }
 
 const ChallengeSchema = new Schema<IChallenge>(

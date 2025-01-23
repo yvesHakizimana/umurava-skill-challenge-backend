@@ -1,11 +1,11 @@
-import {IsString, IsNotEmpty, IsDate, IsEmail, MaxLength} from "class-validator";
+import {IsEmail, IsNotEmpty, IsString, MaxLength} from "class-validator";
 
 export class CreateChallengeDto {
     @IsString()
     @IsNotEmpty()
     public title: string
 
-    @IsDate()
+    @IsNotEmpty()
     public deadline: Date
 
     @IsString()
@@ -26,3 +26,31 @@ export class CreateChallengeDto {
     @MaxLength(20, {each: true})
     deliverables: string[]
 }
+
+export class UpdateChallengeDto {
+    @IsString()
+    title? : string
+
+    @IsNotEmpty()
+    deadline? : string
+
+    @IsNotEmpty()
+    @IsString()
+    moneyPrize? : string
+
+    @IsEmail()
+    contactEmail? : string
+
+    @IsString()
+    projectBrief?: string
+
+    @MaxLength(20, {each: true})
+    projectDescription?: string[]
+
+    @MaxLength(20, {each: true})
+    projectRequirements?: string[]
+
+    @MaxLength(20, {each: true})
+    deliverables?: string[]
+}
+
