@@ -10,7 +10,7 @@ const isAdminMiddleware = async (req: Request, res: Response, next: NextFunction
         next()
 
     } catch(error){
-        next(new HttpException(401, "Unauthorized: You are required to perform full authentication. "));
+        next(new HttpException(401, "Unauthorized: You are required to perform full authentication"));
     }
 }
 
