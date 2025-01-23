@@ -3,9 +3,9 @@ import HttpException from "@exceptions/http-exception";
 
 const isAdminMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        if(!req.currentUser) next(new HttpException(401, "Unauthorized: No user logged in"));
+        if(!req.currentUser) return next(new HttpException(401, "Unauthorized: No user logged in"));
 
-        if(!req.currentUser.isAdmin) next(new HttpException(403, "Forbidden: Admin Access required to perform that action."));
+        if(!req.currentUser.isAdmin) return  next(new HttpException(403, "Forbidden: Admin Access required to perform that action."));
 
         next()
 

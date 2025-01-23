@@ -6,7 +6,7 @@ import {AuthenticateUserDto, RegisterUserDto} from "@dtos/auth-dtos";
 
 
 export default class AuthRouter implements IRouter {
-    public path = '/auth/';
+    public path = '/auth';
     public router = Router();
     public authController = new AuthenticationController();
 
@@ -15,7 +15,7 @@ export default class AuthRouter implements IRouter {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/signup`, validationMiddleware(RegisterUserDto, 'body') , this.authController.signup);
-        this.router.get(`${this.path}/login`, validationMiddleware(AuthenticateUserDto, 'body') ,this.authController.login);
+        this.router.post(`${this.path}/signup`, validationMiddleware(RegisterUserDto, 'body') , this.authController.signup);
+        this.router.post(`${this.path}/login`, validationMiddleware(AuthenticateUserDto, 'body') ,this.authController.login);
     }
 }

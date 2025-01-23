@@ -11,7 +11,7 @@ export default class AuthService {
         if(isEmpty(userRequest)) throw new HttpException(400, "User request is empty.");
 
         const foundUser = await UserModel.findOne({email: userRequest.email});
-        if(foundUser) throw new HttpException(409, "The email is already in use.")
+        if(foundUser) throw new HttpException(400, "The email is already in use.")
 
         const hashedPassword = await hash(userRequest.password, 10);
         return UserModel.create({...userRequest, password: hashedPassword});
