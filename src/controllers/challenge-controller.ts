@@ -26,7 +26,7 @@ export default class ChallengeController {
 
             const challengeFromDb = await this.challengeService.getChallenge(challengeId);
 
-            return res.status(200).json({ message: "Challenge is being retrieved successfully", data: challengeFromDb})
+            res.status(200).json({ message: "Challenge is being retrieved successfully", data: challengeFromDb})
         } catch (err){
             next(err)
         }

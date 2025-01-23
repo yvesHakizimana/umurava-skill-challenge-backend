@@ -9,7 +9,7 @@ export interface IChallenge extends Document{
     projectDescription: string[]
     projectRequirements: string[]
     deliverables: string[],
-    // createdBy: Schema.Types.ObjectId
+    createdBy: Schema.Types.ObjectId
 }
 
 const ChallengeSchema = new Schema<IChallenge>(
@@ -22,7 +22,7 @@ const ChallengeSchema = new Schema<IChallenge>(
         projectDescription: [{type: String, required: true}],
         projectRequirements: [{type: String, required: true}],
         deliverables: [{type: String, required: true}],
-        // createdBy: {type: String, required: true, ref: 'User'},
+        createdBy: {type: String, required: true, ref: 'User'},
     },
     {
         timestamps: true
