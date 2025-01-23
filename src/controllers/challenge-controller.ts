@@ -8,7 +8,7 @@ export default class ChallengeController {
 
     createChallenge = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const challengeCreated = await this.challengeService.createChallenge(req.body);
+            const challengeCreated = await this.challengeService.createChallenge(req.body, req.currentUser.userId);
             res.status(200).json(
                 { message: "Challenge is being created successfully", challenge: challengeCreated })
         } catch (error){

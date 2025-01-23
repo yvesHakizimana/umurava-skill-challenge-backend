@@ -1,4 +1,4 @@
-import {Schema, model,Document} from "mongoose";
+import {Schema, model,Document, Types} from "mongoose";
 
 export interface IChallenge extends Document{
     title: string
@@ -9,7 +9,7 @@ export interface IChallenge extends Document{
     projectDescription: string[]
     projectRequirements: string[]
     deliverables: string[],
-    createdBy: Schema.Types.ObjectId
+    createdBy: Types.ObjectId
 }
 
 const ChallengeSchema = new Schema<IChallenge>(
@@ -22,7 +22,7 @@ const ChallengeSchema = new Schema<IChallenge>(
         projectDescription: [{type: String, required: true}],
         projectRequirements: [{type: String, required: true}],
         deliverables: [{type: String, required: true}],
-        createdBy: {type: String, required: true, ref: 'User'},
+        createdBy: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
     },
     {
         timestamps: true
