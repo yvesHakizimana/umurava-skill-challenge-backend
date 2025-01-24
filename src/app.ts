@@ -36,6 +36,17 @@ export default class App {
     }
 
 
+    /*
+    * todo::
+    *  1. Swagger configuration.
+    *   2. Prometheus and Grafana configuration
+    *   3. Testing
+    *   4. Asking the questions
+    *   5. Revising about PM2 and why I need it
+    *   6. This will continue to go until sports
+    *   7. In the evening I will revise the mukama's File>> Machine Learning.
+    *
+    * */
 
 
     public listen() {
