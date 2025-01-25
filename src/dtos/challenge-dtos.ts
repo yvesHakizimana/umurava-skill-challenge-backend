@@ -17,13 +17,13 @@ export class CreateChallengeDto {
     @IsString()
     projectBrief: string
 
-    @MaxLength(20, {each: true})
+    @MaxLength(255, {each: true})
     projectDescription: string[]
 
-    @MaxLength(20, {each: true})
+    @MaxLength(255, {each: true})
     projectRequirements: string[]
 
-    @MaxLength(20, {each: true})
+    @MaxLength(255, {each: true})
     deliverables: string[]
 }
 
@@ -44,13 +44,13 @@ export class UpdateChallengeDto {
     @IsString()
     projectBrief?: string
 
-    @MaxLength(20, {each: true})
+    @MaxLength(255, {each: true})
     projectDescription?: string[]
 
-    @MaxLength(20, {each: true})
+    @MaxLength(255, {each: true})
     projectRequirements?: string[]
 
-    @MaxLength(20, {each: true})
+    @MaxLength(255, {each: true})
     deliverables?: string[]
 }
 
