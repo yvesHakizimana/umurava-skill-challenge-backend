@@ -21,7 +21,7 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
     try {
         const authHeader = req.get("Authorization");
 
-        if(!authHeader) next(new HttpException(401, "Unauthorized: Token missing or invalid."));
+        if(!authHeader)  return next(new HttpException(401, "Unauthorized: Token missing or invalid."));
 
         const token = authHeader.split(" ")[1]
 
