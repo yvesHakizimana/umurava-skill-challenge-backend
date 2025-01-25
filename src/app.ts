@@ -74,9 +74,13 @@ export default class App {
             swaggerDefinition: {
                 openapi: "3.0.0",
                 info: {
-                    title: "REST API Documentation",
+                    title: "Umurava Skill Challenge API",
                     version: "1.0.0",
-                    description: "Umurava Skill Challenge Documentation"
+                    description: "" +
+                        "Comprehensive Documentation for the Umurava Skill Challenge API," +
+                        "detailing available endpoints" +
+                        "request/response formats," +
+                        "and authentication requirements."
                 },
             },
             apis: ['swagger.yaml']

@@ -4,12 +4,13 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      description: JWT token is required for authentication
 
 tags:
   - name: challenges
-    description: Challenges API
+    description: Operations related to skill challenges
   - name: auth
-    description: Authentication API
+    description: Authentication-related operations
 
 paths:
   /api/v1/challenges:
