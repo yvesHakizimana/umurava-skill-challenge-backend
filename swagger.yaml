@@ -265,6 +265,7 @@ definitions:
         description: User's email address
       password:
         type: string
+        format: password
         minLength: 8
         description: Password with at least 8 characters
       firstName:
@@ -286,6 +287,7 @@ definitions:
         description: Email of the user.
       password:
         type: string
+        format: password
         minLength: 8
         description: User's password
 
