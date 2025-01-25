@@ -55,6 +55,8 @@ paths:
       responses:
         200:
           description: Challenge details
+        400:
+          description: Bad request
         404:
           description: Challenge not found
         500:
