@@ -30,12 +30,13 @@ paths:
       summary: Create A challenge
       security:
         - BearerAuth: []
-      parameters:
-        - name: body
-          in: body
-          description: Create challenge request
-          schema:
-            $ref: '#/definitions/CreateChallengeDto'
+      requestBody:
+        description: Create challenge request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/CreateChallengeDto'
       responses:
         201:
           description: Challenge created successfully
@@ -79,12 +80,13 @@ paths:
           description: ID of the challenge
           required: true
           type: string
-        - name: body
-          in: body
-          description: Update challenge request
-          required: true
-          schema:
-            $ref: '#/definitions/UpdateChallengeDto'
+      requestBody:
+        description: Update challenge request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/UpdateChallengeDto'
       responses:
         200:
           description: Challenge updated successfully
@@ -126,13 +128,12 @@ paths:
       tags:
         - auth
       summary: User Signup
-      parameters:
-        - name: body
-          in: body
-          description: User signup request
-          required: true
-          schema:
-            $ref: '#/definitions/RegisterUserDto'
+      requestBody:
+        description: User signup request
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/RegisterUserDto'
       responses:
         201:
           description: User registered successfully
@@ -148,13 +149,12 @@ paths:
       tags:
         - auth
       summary: User login
-      parameters:
-        - name: body
-          in: body
-          description: User authentication request
-          required: true
-          schema:
-            $ref: '#/definitions/AuthenticationUserDto'
+      requestBody:
+        description: User authentication request
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/AuthenticationUserDto'
       responses:
         200:
           description: User authenticated successfully
@@ -254,11 +254,17 @@ definitions:
   RegisterUserDto:
     type: Object
     required:
-      - email
-      - password
       - firstName
       - lastName
+      - email
+      - password
     properties:
+      firstName:
+        type: string
+        description: User's first name
+      lastName:
+        type: string
+        description: User's last name
       email:
         type: string
         format: email
@@ -268,12 +274,6 @@ definitions:
         format: password
         minLength: 8
         description: Password with at least 8 characters
-      firstName:
-        type: string
-        description: User's first name
-      lastName:
-        type: string
-        description: User's last name
 
   AuthenticationUserDto:
     type: Object
