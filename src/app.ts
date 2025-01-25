@@ -12,6 +12,7 @@ import swaggerUi from "swagger-ui-express"
 import errorMiddleware from "@middlewares/error-middleware";
 import {mongoDbConnection} from "@databases";
 import {IRouter} from "@routes/router-interface";
+require('../instrumentation')
 
 export default class App {
     public app: express.Application
@@ -39,7 +40,7 @@ export default class App {
     /*
     * todo::
     *
-    *    2. Prometheus and Grafana configuration
+    *   2. Prometheus and Grafana configuration
     *   3. Testing
     *   4. Asking the questions
     *   5. Revising about PM2 and why I need it

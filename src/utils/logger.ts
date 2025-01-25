@@ -3,6 +3,7 @@ import { join } from 'path'
 import winston from "winston";
 import winstonDaily from 'winston-daily-rotate-file'
 import {LOG_DIR} from "@config";
+import {context, trace} from "@opentelemetry/api";
 
 const logDir = join(__dirname, LOG_DIR || 'logs')
 
@@ -17,7 +18,9 @@ if(!existsSync(logDir)) {
 /*
 * Creates the log format which will be used for the logs.
 * */
-const logFormat = winston.format.printf(({ timestamp, level, message}) => `${timestamp} ${level}: ${message}`)
+const logFormat = winston.format.printf(({ timestamp, level, message, traceId }) => {
+    return `${timestamp} [traceId: ${traceId || 'no-trace'}] ${level}: ${message}`;
+});
 
 /*
 * Log Level
@@ -28,7 +31,14 @@ const logFormat = winston.format.printf(({ timestamp, level, message}) => `${tim
 const logger = winston.createLogger({
     format: winston.format.combine(
         winston.format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-        logFormat,
+        winston.format((info) => {
+            const span = trace.getSpan(context.active())
+            if(span) {
+                info.traceId = span.spanContext().traceId
+            }
+            return info
+        })(),
+        logFormat
     ),
     transports: [
         new winstonDaily({
