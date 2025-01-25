@@ -34,12 +34,39 @@ services:
       timeout: 10s
       retries: 3
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus_umurava
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: unless-stopped
+    networks:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana_umurava
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: unless-stopped
+    networks:
+      - backend
+
 
 networks:
   backend:
     driver: bridge
 
 volumes:
+  grafana-storage:
   data:
     driver: local
   node_modules:
