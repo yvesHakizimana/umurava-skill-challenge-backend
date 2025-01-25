@@ -1,120 +1,292 @@
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
 tags:
-  - name: users
-    description: users API
+  - name: challenges
+    description: Challenges API
+  - name: auth
+    description: Authentication API
 
 paths:
-  # [GET] users
-  /users:
+  /api/v1/challenges:
     get:
       tags:
-        - users
-      summary: Find All Users
+        - challenges
+      summary: Get All Challenges
       responses:
         200:
-          description: 'OK'
+          description: List of Challenges
         500:
-          description: 'Server Error'
+          description: Internal Server Error
 
-    # [POST] users
     post:
       tags:
-        - users
-      summary: Add User
+        - challenges
+      summary: Create A challenge
+      security:
+        - BearerAuth: []
       parameters:
         - name: body
           in: body
-          description: user Data
-          required: true
+          description: Create challenge request
           schema:
-            $ref: '#/definitions/users'
+            $ref: '#/definitions/CreateChallengeDto'
       responses:
         201:
-          description: 'Created'
+          description: Challenge created successfully
         400:
-          description: 'Bad Request'
-        409:
-          description: 'Conflict'
+          description: Bad Request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
         500:
-          description: 'Server Error'
+          description: Internal Server Error
 
-  # [GET] users/id
-  /users/{id}:
+  /api/v1/challenges/{challengeId}:
     get:
       tags:
-        - users
-      summary: Find User By Id
+        - challenges
+      summary: Get a challenge By ID
       parameters:
-        - name: id
+        - name: challengeId
           in: path
-          description: User Id
+          description: ID of the challenge
           required: true
+          type: string
       responses:
         200:
-          description: 'OK'
-        409:
-          description: 'Conflict'
+          description: Challenge details
+        404:
+          description: Challenge not found
         500:
-          description: 'Server Error'
+          description: Internal Server Error
 
-    # [PUT] users/id
     put:
       tags:
-        - users
-      summary: Update User By Id
+        - challenges
+      summary: Update a Challenge By ID
+      security:
+        - BearerAuth: [ ]
       parameters:
-        - name: id
+        - name: challengeId
           in: path
-          description: user Id
+          description: ID of the challenge
           required: true
+          type: string
         - name: body
           in: body
-          description: user Data
+          description: Update challenge request
           required: true
           schema:
-            $ref: '#/definitions/users'
+            $ref: '#/definitions/UpdateChallengeDto'
       responses:
         200:
-          description: 'OK'
+          description: Challenge updated successfully
         400:
-          description: 'Bad Request'
-        409:
-          description: 'Conflict'
+          description: Bad Request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
         500:
-          description: 'Server Error'
+          description: Internal Server Error
 
-    # [DELETE] users/id
     delete:
       tags:
-        - users
-      summary: Delete User By Id
+        - challenges
+      summary: Delete a Challenge by ID
+      security:
+        - BearerAuth: [ ]
       parameters:
-        - name: id
+        - name: challengeId
           in: path
-          description: user Id
+          description: ID of the challenge
           required: true
+          type: string
       responses:
         200:
-          description: 'OK'
-        409:
-          description: 'Conflict'
+          description: Challenge deleted successfully
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Challenge not found
         500:
-          description: 'Server Error'
+          description: Internal Server Error
 
-# definitions
+  /api/v1/auth/signup:
+    post:
+      tags:
+        - auth
+      summary: User Signup
+      parameters:
+        - name: body
+          in: body
+          description: User signup request
+          required: true
+          schema:
+            $ref: '#/definitions/RegisterUserDto'
+      responses:
+        201:
+          description: User registered successfully
+        400:
+          description: Bad Request
+        409:
+          description: Conflict
+        500:
+          description: Internal Server Error
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - auth
+      summary: User login
+      parameters:
+        - name: body
+          in: body
+          description: User authentication request
+          required: true
+          schema:
+            $ref: '#/definitions/AuthenticationUserDto'
+      responses:
+        200:
+          description: User authenticated successfully
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
+
 definitions:
-  users:
-    type: object
+  CreateChallengeDto:
+    type: Object
+    required:
+      - title
+      - deadline
+      - moneyPrize
+      - contactEmail
+      - projectBrief
+      - projectDescription
+      - projectRequirements
+      - deliverables
+    properties:
+      title:
+        type: string
+        description: Title of the challenge
+      deadline:
+        type: string
+        format: date
+        description: Deadline of the challenge
+      moneyPrize:
+        type: string
+        description: Prize for the challenge
+      contactEmail:
+        type: string
+        format: email
+        description: Contact Email for inquiries
+      projectBrief:
+        type: string
+        description: Brief description of the project
+      projectDescription:
+        type: array
+        items:
+          type: string
+          maxLength: 20
+        description: List of project Descriptions
+      projectRequirements:
+        type: array
+        items:
+          type: string
+          maxLength: 20
+        description: List of project requirements
+      deliverables:
+        type: array
+        items:
+          type: string
+          maxLength: 20
+        description: List of deliverables for the challenge
+
+  UpdateChallengeDto:
+    type: Object
+    properties:
+      title:
+        type: string
+        description: Title of the challenge
+      deadline:
+        type: string
+        format: date
+        description: Deadline of the challenge
+      moneyPrize:
+        type: string
+        description: Prize for the challenge
+      contactEmail:
+        type: string
+        format: email
+        description: Contact Email for inquiries
+      projectBrief:
+        type: string
+        description: Brief description of the project.
+      projectDescription:
+        type: array
+        items:
+          type: string
+          maxLength: 20
+        description: List of project descriptions
+      projectRequirements:
+        type: array
+        items:
+          type: string
+          maxLength: 20
+        description: List of project requirements
+      deliverables:
+        type: array
+        items:
+          type: string
+          maxLength: 20
+        description: List of deliverables for the challenge
+
+  RegisterUserDto:
+    type: Object
+    required:
+      - email
+      - password
+      - firstName
+      - lastName
+    properties:
+      email:
+        type: string
+        format: email
+        description: User's email address
+      password:
+        type: string
+        minLength: 8
+        description: Password with at least 8 characters
+      firstName:
+        type: string
+        description: User's first name
+      lastName:
+        type: string
+        description: User's last name
+
+  AuthenticationUserDto:
+    type: Object
     required:
       - email
       - password
     properties:
       email:
         type: string
-        description: user Email
+        format: email
+        description: Email of the user.
       password:
         type: string
-        description: user Password
+        minLength: 8
+        description: User's password
 
-schemes:
-  - https
-  - http
+
+
