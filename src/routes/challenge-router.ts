@@ -1,4 +1,4 @@
-import express, {Router} from "express";
+import {Router} from "express";
 import {IRouter} from "@routes/router-interface";
 import ChallengeController from "@controllers/challenge-controller";
 import validationMiddleware from "@middlewares/validation-middleware";
