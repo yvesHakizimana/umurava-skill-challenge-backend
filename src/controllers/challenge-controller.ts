@@ -6,6 +6,17 @@ import {Schema, SchemaType} from "mongoose";
 export default class ChallengeController {
     private challengeService: ChallengeService = new ChallengeService();
 
+    startChallenge = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const {challengeId} = req.params;
+            const challengeUpdated = await this.challengeService.startChallenge(challengeId, req.currentUser.userId)
+            res.status(200).json(
+                { message: "Added to challenge participants successfully", challenge: challengeUpdated })
+        } catch (error){
+            next(error)
+        }
+    }
+
     createChallenge = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const challengeCreated = await this.challengeService.createChallenge(req.body, req.currentUser.userId);
@@ -21,8 +32,6 @@ export default class ChallengeController {
         try {
             const {challengeId} = req.params;
 
-            //todo:: Validation of the mongodb ids.
-            // if(challengeId  instanceof Schema.Types.ObjectId){}
 
             const challengeFromDb = await this.challengeService.getChallenge(challengeId);
 

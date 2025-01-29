@@ -9,6 +9,7 @@ import {
     IsString,
     MaxLength
 } from "class-validator";
+import {IsObjectId} from "class-validator-mongo-object-id";
 
 export enum SeniorityLevel {
     JUNIOR='junior',
@@ -107,5 +108,10 @@ export class UpdateChallengeDto {
     @IsString({each: true})
     @ArrayMinSize(1)
     skillsNeeded: string[]
+}
+
+export class ParticipateToChallengeDto {
+    @IsObjectId()
+    challengeId: string
 }
 
