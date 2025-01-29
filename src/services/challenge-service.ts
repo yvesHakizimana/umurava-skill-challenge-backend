@@ -2,7 +2,7 @@ import {CreateChallengeDto, UpdateChallengeDto} from "@dtos/challenge-dtos";
 import {isEmpty} from "@utils/is-empty";
 import HttpException from "@exceptions/http-exception";
 import ChallengeModel from "@models/challenge-model"
-import {isValidObjectId, Types} from "mongoose";
+import {isValidObjectId} from "mongoose";
 import {removeScheduledCompletion, rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/scheduler";
 
 export default class ChallengeService {
@@ -14,8 +14,37 @@ export default class ChallengeService {
         return challenge
     }
 
-    public async getAllChallenges(){
-        return ChallengeModel.find();
+    public async getAllChallenges(page: number = 1, limit: number = 10, status?: string){
+        // Validation of the page and limit
+        if(page < 1) throw new HttpException(400, "Page must be greater than 0.")
+        if(limit < 1) throw new HttpException(400, "Limit must be greater than 0.")
+
+        // Build the query
+        const query: any = {}
+        if(status)
+            query.status = status;
+
+        // The skip value.
+        const skip = (page - 1) * limit;
+
+        const challenges = await ChallengeModel
+            .find(query)
+            .sort({deadline: 1})
+            .skip(skip)
+            .limit(limit)
+            .exec()
+
+        const totalChallenges = await ChallengeModel.countDocuments(query)
+
+        return {
+            data: challenges,
+            pagination: {
+                page,
+                limit,
+                totalChallenges,
+                totalPages: Math.ceil(totalChallenges / limit),
+            }
+        }
     }
 
     public async getChallenge(challengeId: string){

@@ -5,7 +5,7 @@ import {
     IsEmail,
     IsEnum,
     IsNotEmpty,
-    IsOptional,
+    IsOptional, IsPositive,
     IsString,
     MaxLength
 } from "class-validator";
@@ -15,6 +15,12 @@ export enum SeniorityLevel {
     JUNIOR='junior',
     INTERMEDIATE='intermediate',
     SENIOR='senior'
+}
+
+export enum Status {
+    OPEN='open',
+    ONGOING='ongoing',
+    COMPLETED='completed'
 }
 
 export class CreateChallengeDto {
@@ -115,3 +121,16 @@ export class ParticipateToChallengeDto {
     challengeId: string
 }
 
+export class PaginationData {
+    @IsOptional()
+    @IsPositive()
+    public page: number = 1
+
+    @IsOptional()
+    @IsPositive()
+    public limit: number = 1
+
+    @IsOptional()
+    @IsEnum(Status)
+    public status: 'open' | 'ongoing' | 'completed' = 'open'
+}

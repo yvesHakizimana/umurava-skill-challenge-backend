@@ -39,8 +39,11 @@ export default class ChallengeController {
 
     getAllChallenges= async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const allChallenges = await this.challengeService.getAllChallenges();
-            res.status(200).json({ message: "Challenges are being retrieved successfully", data: allChallenges });
+            const page = parseInt(req.params.page as string) || 1;
+            const limit = parseInt(req.params.limit as string) || 10;
+            const status = req.params.status;
+            const result = await this.challengeService.getAllChallenges(page, limit, status);
+            res.status(200).json(result);
         } catch (error){
             next(error)
         }
