@@ -2,7 +2,7 @@ import {CreateChallengeDto, UpdateChallengeDto} from "@dtos/challenge-dtos";
 import {isEmpty} from "@utils/is-empty";
 import HttpException from "@exceptions/http-exception";
 import ChallengeModel from "@models/challenge-model"
-import {isValidObjectId} from "mongoose";
+import {isValidObjectId, Types} from "mongoose";
 import {removeScheduledCompletion, rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/scheduler";
 
 export default class ChallengeService {
@@ -120,5 +120,38 @@ export default class ChallengeService {
             update,
             {new: true}
         );
+    }
+
+    public async getParticipantDetails(challengeId: string, page: number = 1, limit: number = 10){
+        if(!isValidObjectId(challengeId)) throw new HttpException(400, "Invalid challengeId format")
+
+        if (page < 1) throw new HttpException(400, "Invalid page number")
+        if (limit < 1) throw new HttpException(400, "Invalid limit number")
+
+        return  ChallengeModel.aggregate([
+            // Match phase of the pipeline.
+            { $match: { _id: new Types.ObjectId(challengeId) }},
+
+            // Lookup stage to fetch the details of the participants from the user's collection.
+            { $lookup: {
+                    from: 'users',
+                    localField: 'participants',
+                    foreignField: '_id',
+                    as: 'participants',
+                }
+            },
+
+            { $unwind: '$participants'}, // flatten the array.
+
+            {$skip: (page - 1) * limit},
+            {$limit: limit},
+
+            { $project: {
+                _id: 0,
+                fullName: {$concat: ['$participants.firstName', ' ', '$participants.lastName']},
+                email: "$participants.email",
+                }
+            }
+        ])
     }
 }

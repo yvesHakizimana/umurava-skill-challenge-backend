@@ -39,9 +39,9 @@ export default class ChallengeController {
 
     getAllChallenges= async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const page = parseInt(req.params.page as string) || 1;
-            const limit = parseInt(req.params.limit as string) || 10;
-            const status = req.params.status;
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const status = req.query.status as string || 'open';
             const result = await this.challengeService.getAllChallenges(page, limit, status);
             res.status(200).json(result);
         } catch (error){
@@ -68,6 +68,17 @@ export default class ChallengeController {
             const {challengeId} = req.params;
             await this.challengeService.deleteChallengeById(challengeId);
             res.status(200).json({ message: "Challenge was deleted successfully"})
+        } catch (error){
+            next(error)
+        }
+    }
+
+    getParticipantDetails = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const result = await this.challengeService.getParticipantDetails(req.currentUser.userId, page, limit);
+            res.status(200).json(result);
         } catch (error){
             next(error)
         }

@@ -21,7 +21,6 @@ export interface IChallenge extends Document{
     participants: Types.ObjectId[]
     status: status
     category: category
-
 }
 
 const ChallengeSchema = new Schema<IChallenge>(
@@ -44,7 +43,7 @@ const ChallengeSchema = new Schema<IChallenge>(
         category: {
             type: String,
             required: true,
-            enum: ['design','fronted', 'backend','full-stack'],
+            enum: ['design','fronted', 'backend','fullstack'],
         },
         seniorityLevel: {
             type: [String],
