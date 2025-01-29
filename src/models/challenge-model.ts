@@ -4,6 +4,8 @@ export type SeniorityLevel = 'junior' | 'intermediate' | 'senior';
 
 export type status = 'open' | 'ongoing' |'completed';
 
+export type category = 'design' | 'fronted' | 'backend' | 'fullstack';
+
 export interface IChallenge extends Document{
     title: string
     deadline: Date
@@ -18,6 +20,7 @@ export interface IChallenge extends Document{
     skillsNeeded: string[]
     participants: Types.ObjectId[]
     status: status
+    category: category
 
 }
 
@@ -37,6 +40,11 @@ const ChallengeSchema = new Schema<IChallenge>(
             required: false,
             enum: ['open', 'ongoing', 'completed'],
             default: 'open'
+        },
+        category: {
+            type: String,
+            required: true,
+            enum: ['design','fronted', 'backend','full-stack'],
         },
         seniorityLevel: {
             type: [String],

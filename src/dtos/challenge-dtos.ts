@@ -23,6 +23,13 @@ export enum Status {
     COMPLETED='completed'
 }
 
+export enum Category {
+    DESIGN='design',
+    FRONTED='fronted',
+    BACKEND='backend',
+    FULLSTACK='fullstack'
+}
+
 export class CreateChallengeDto {
     @IsString()
     @IsNotEmpty()
@@ -57,6 +64,9 @@ export class CreateChallengeDto {
     @ArrayMaxSize(3) // Ensure no more than three seniority levels are provided.
     @IsEnum(SeniorityLevel, {each: true}) // Validate each value in the array
     public seniorityLevel: SeniorityLevel[] // Must be a set of valid values
+
+    @IsEnum(Category)
+    public category: Category
 
     @IsArray()
     @IsString({each: true})
@@ -108,6 +118,10 @@ export class UpdateChallengeDto {
     @ArrayMaxSize(3) // Ensure no more than three seniority levels are provided.
     @IsEnum(SeniorityLevel, {each: true}) // Validate each value in the array
     public seniorityLevel: SeniorityLevel[] // Must be a set of valid values
+
+    @IsOptional()
+    @IsEnum(Category)
+    public category: Category
 
     @IsOptional()
     @IsArray()
