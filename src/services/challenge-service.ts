@@ -55,4 +55,23 @@ export default class ChallengeService {
 
         return ChallengeModel.findByIdAndDelete(challengeId)
     }
+
+    public async startChallenge(challengeId: string, participantId: string){
+        if(!isValidObjectId(challengeId) || !isValidObjectId(participantId))
+            throw new HttpException(400, "Invalid participant or challengeIds.")
+
+        const challenge = await ChallengeModel.findById(challengeId);
+        if(!challenge) throw new HttpException(400, "Challenge does not exist");
+
+        // @ts-ignore
+        if(challenge.participants.includes(participantId)){
+            throw new HttpException(400, "You have already joined the challenge.");
+        }
+
+        return ChallengeModel.findByIdAndUpdate(
+            challengeId,
+            {$addToSet: {participants: participantId}},
+            {new: true}
+        );
+    }
 }
