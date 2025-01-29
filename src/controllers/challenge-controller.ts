@@ -1,7 +1,5 @@
 import ChallengeService from "@services/challenge-service";
 import {NextFunction, Request, Response} from "express";
-import HttpException from "@exceptions/http-exception";
-import {Schema, SchemaType} from "mongoose";
 
 export default class ChallengeController {
     private challengeService: ChallengeService = new ChallengeService();
