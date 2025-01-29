@@ -29,7 +29,6 @@ export default class ChallengeController {
         try {
             const {challengeId} = req.params;
 
-
             const challengeFromDb = await this.challengeService.getChallenge(challengeId);
 
             res.status(200).json({ message: "Challenge is being retrieved successfully", data: challengeFromDb})
@@ -53,8 +52,6 @@ export default class ChallengeController {
             // Getting the params.
             const {challengeId} = req.params;
 
-            //todo:: Validation of the mongodb ids.
-            // if(challengeId  instanceof Schema.Types.ObjectId){}
             const updatedChallenge = await this.challengeService.updateChallengeById(challengeId, req.body);
 
             res.status(200).json({ message: "Challenge is being updated successfully", data: updatedChallenge });
@@ -65,11 +62,9 @@ export default class ChallengeController {
 
     deleteChallengeById = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            //todo:: Validation of the mongodb ids.
-            // if(challengeId  instanceof Schema.Types.ObjectId){}
             const {challengeId} = req.params;
-            const deletedChallenge = await this.challengeService.deleteChallengeById(challengeId);
-            res.status(200).json({ message: "Challenge is being deleted successfully"})
+            await this.challengeService.deleteChallengeById(challengeId);
+            res.status(200).json({ message: "Challenge was deleted successfully"})
         } catch (error){
             next(error)
         }
