@@ -18,7 +18,7 @@ export default class ChallengeRouter implements IRouter {
 
     private initializeRoutes() {
         this.router.get(`${this.path}`,this.challengeController.getAllChallenges);
-        this.router.get(`${this.path}/:challengeId`, this.challengeController.getChallengeById);
+        this.router.get(`${this.path}/:challengeId`, authMiddleware, this.challengeController.getChallengeById);
         this.router.post(`${this.path}`, authMiddleware, isAdminMiddleware, validationMiddleware(CreateChallengeDto, 'body') ,  this.challengeController.createChallenge);
         this.router.put(`${this.path}/:challengeId`, authMiddleware, isAdminMiddleware, validationMiddleware(UpdateChallengeDto, 'body'), this.challengeController.updateChallengeById)
         this.router.delete(`${this.path}/:challengeId`, authMiddleware, isAdminMiddleware,  this.challengeController.deleteChallengeById);
