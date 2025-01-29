@@ -27,7 +27,6 @@ export default class ChallengeController {
         }
     }
 
-
     getChallengeById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {challengeId} = req.params;
@@ -41,7 +40,6 @@ export default class ChallengeController {
         }
     }
 
-
     getAllChallenges= async (req: Request, res: Response, next: NextFunction) => {
         try {
             const allChallenges = await this.challengeService.getAllChallenges();
@@ -51,7 +49,6 @@ export default class ChallengeController {
         }
 
     }
-
 
     updateChallengeById= async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -67,7 +64,6 @@ export default class ChallengeController {
             next(error)
         }
     }
-
 
     deleteChallengeById = async (req: Request, res: Response, next: NextFunction) => {
         try {
