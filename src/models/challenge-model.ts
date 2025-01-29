@@ -1,5 +1,7 @@
 import {Schema, model,Document, Types} from "mongoose";
 
+export type SeniorityLevel = 'junior' | 'intermediate' | 'senior';
+
 export interface IChallenge extends Document{
     title: string
     deadline: Date
@@ -9,7 +11,9 @@ export interface IChallenge extends Document{
     projectDescription: string[]
     projectRequirements: string[]
     deliverables: string[],
-    createdBy: Types.ObjectId
+    createdBy: Types.ObjectId,
+    seniorityLevel: SeniorityLevel[],
+    skillsNeeded: string[]
 }
 
 const ChallengeSchema = new Schema<IChallenge>(
@@ -23,6 +27,15 @@ const ChallengeSchema = new Schema<IChallenge>(
         projectRequirements: [{type: String, required: true}],
         deliverables: [{type: String, required: true}],
         createdBy: {type: Schema.Types.ObjectId, required: true, ref: 'User'},
+        seniorityLevel: {
+            type: [String],
+            required: true,
+            enum: ['junior', 'intermediate', 'senior'] as SeniorityLevel[],
+        },
+        skillsNeeded: [{
+            type: String,
+            required: true,
+        }]
     },
     {
         timestamps: true

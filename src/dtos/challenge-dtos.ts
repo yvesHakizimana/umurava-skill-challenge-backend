@@ -1,4 +1,20 @@
-import {IsEmail, IsNotEmpty, IsString, MaxLength} from "class-validator";
+import {
+    ArrayMaxSize,
+    ArrayMinSize,
+    IsArray,
+    IsEmail,
+    IsEnum,
+    IsNotEmpty,
+    IsOptional,
+    IsString,
+    MaxLength
+} from "class-validator";
+
+export enum SeniorityLevel {
+    JUNIOR='junior',
+    INTERMEDIATE='intermediate',
+    SENIOR='senior'
+}
 
 export class CreateChallengeDto {
     @IsString()
@@ -17,40 +33,79 @@ export class CreateChallengeDto {
     @IsString()
     projectBrief: string
 
+    @IsArray()
     @MaxLength(255, {each: true})
     projectDescription: string[]
 
+    @IsArray()
     @MaxLength(255, {each: true})
     projectRequirements: string[]
 
+    @IsArray()
     @MaxLength(255, {each: true})
     deliverables: string[]
+
+    @IsArray()
+    @ArrayMinSize(1) // Ensure that at least one seniority level is provided.
+    @ArrayMaxSize(3) // Ensure no more than three seniority levels are provided.
+    @IsEnum(SeniorityLevel, {each: true}) // Validate each value in the array
+    public seniorityLevel: SeniorityLevel[] // Must be a set of valid values
+
+    @IsArray()
+    @IsString({each: true})
+    @ArrayMinSize(1)
+    skillsNeeded: string[]
+
 }
 
 export class UpdateChallengeDto {
+    @IsOptional()
     @IsString()
-    title? : string
-
     @IsNotEmpty()
-    deadline? : string
+    public title: string
 
+    @IsOptional()
     @IsNotEmpty()
+    public deadline: Date
+
+    @IsOptional()
     @IsString()
-    moneyPrize? : string
+    public moneyPrize: string
 
+    @IsOptional()
     @IsEmail()
-    contactEmail? : string
+    public contactEmail: string
 
+    @IsOptional()
     @IsString()
-    projectBrief?: string
+    projectBrief: string
 
+    @IsOptional()
+    @IsArray()
     @MaxLength(255, {each: true})
-    projectDescription?: string[]
+    projectDescription: string[]
 
+    @IsOptional()
+    @IsArray()
     @MaxLength(255, {each: true})
-    projectRequirements?: string[]
+    projectRequirements: string[]
 
+    @IsOptional()
+    @IsArray()
     @MaxLength(255, {each: true})
-    deliverables?: string[]
+    deliverables: string[]
+
+    @IsOptional()
+    @IsArray()
+    @ArrayMinSize(1) // Ensure that at least one seniority level is provided.
+    @ArrayMaxSize(3) // Ensure no more than three seniority levels are provided.
+    @IsEnum(SeniorityLevel, {each: true}) // Validate each value in the array
+    public seniorityLevel: SeniorityLevel[] // Must be a set of valid values
+
+    @IsOptional()
+    @IsArray()
+    @IsString({each: true})
+    @ArrayMinSize(1)
+    skillsNeeded: string[]
 }
 
