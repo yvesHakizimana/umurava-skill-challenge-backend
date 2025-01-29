@@ -65,6 +65,7 @@ const ChallengeSchema = new Schema<IChallenge>(
     }
 )
 
-ChallengeSchema.index({ deadline: 1 , status: 1 })
+// Index for adding making the queries more performant.
+ChallengeSchema.index({ deadline: 1 , status: 1, createdBy: 1 })
 
 export default model<IChallenge>("Challenge", ChallengeSchema);

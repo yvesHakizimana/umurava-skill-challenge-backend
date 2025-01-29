@@ -40,7 +40,7 @@ export default class ChallengeController {
     getAllChallenges= async (req: Request, res: Response, next: NextFunction) => {
         try {
             const page = parseInt(req.query.page as string) || 1;
-            const limit = parseInt(req.query.limit as string) || 10;
+            const limit = parseInt(req.query.limit as string) || 6;
             const status = req.query.status as string || 'open';
             const result = await this.challengeService.getAllChallenges(page, limit, status);
             res.status(200).json(result);
@@ -79,6 +79,16 @@ export default class ChallengeController {
             const limit = parseInt(req.query.limit as string) || 10;
             const result = await this.challengeService.getParticipantDetails(req.currentUser.userId, page, limit);
             res.status(200).json(result);
+        } catch (error){
+            next(error)
+        }
+    }
+
+    getChallengeStats = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const filter = req.query.range as string || "this_week"
+            const stats = await this.challengeService.getChallengeStats(filter);
+            res.status(200).json(stats);
         } catch (error){
             next(error)
         }

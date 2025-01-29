@@ -2,7 +2,13 @@ import {Router} from "express";
 import {IRouter} from "@routes/router-interface";
 import ChallengeController from "@controllers/challenge-controller";
 import validationMiddleware from "@middlewares/validation-middleware";
-import {CreateChallengeDto, PaginationData, ParticipateToChallengeDto, UpdateChallengeDto} from "@dtos/challenge-dtos";
+import {
+    CreateChallengeDto,
+    ChallengePaginationData,
+    ParticipateToChallengeDto,
+    UpdateChallengeDto,
+    StatsQueryData
+} from "@dtos/challenge-dtos";
 import authMiddleware from "@middlewares/auth-middleware";
 import isAdminMiddleware from "@middlewares/isadmin-middleware";
 
@@ -20,7 +26,7 @@ export default class ChallengeRouter implements IRouter {
         // Getting all challenges but with pagination.
         this.router.get(
             `${this.path}`,
-            validationMiddleware(PaginationData, 'query'),
+            validationMiddleware(ChallengePaginationData, 'query'),
             this.challengeController.getAllChallenges
         );
 
@@ -36,8 +42,16 @@ export default class ChallengeRouter implements IRouter {
             `${this.path}/:challengeId/participants`,
             authMiddleware,
             isAdminMiddleware,
-            validationMiddleware(PaginationData, 'query'),
+            validationMiddleware(ChallengePaginationData, 'query'),
             this.challengeController.getParticipantDetails
+        )
+
+        this.router.get(
+            `${this.path}/stats`,
+            authMiddleware,
+            isAdminMiddleware,
+            validationMiddleware(StatsQueryData, 'query'),
+            this.challengeController.getChallengeStats
         )
 
         // Creating a new challenge which will be done by the admin.

@@ -4,6 +4,7 @@ import HttpException from "@exceptions/http-exception";
 import ChallengeModel from "@models/challenge-model"
 import {isValidObjectId, Types} from "mongoose";
 import {removeScheduledCompletion, rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/scheduler";
+import {aggregateStats, ChallengeStat, DateRange, getDateRanges} from "@models/statistics-model";
 
 export default class ChallengeService {
 
@@ -14,7 +15,7 @@ export default class ChallengeService {
         return challenge
     }
 
-    public async getAllChallenges(page: number = 1, limit: number = 10, status?: string){
+    public async getAllChallenges(page: number = 1, limit: number = 6, status?: string){
         // Validation of the page and limit
         if(page < 1) throw new HttpException(400, "Page must be greater than 0.")
         if(limit < 1) throw new HttpException(400, "Limit must be greater than 0.")
@@ -153,5 +154,71 @@ export default class ChallengeService {
                 }
             }
         ])
+    }
+
+    public async getChallengeStats(filter: string){
+        // Get the date ranges.
+        const {current, previous } = getDateRanges(filter);
+
+        const [currentStats, previousStats] = await Promise.all([
+            this.getCombinedStats(current),
+            this.getCombinedStats(previous),
+        ])
+
+        return this.calculateStatsResponse(currentStats, previousStats)
+    }
+
+    private async getCombinedStats(range: DateRange){
+        try {
+            const precomputed = await ChallengeStat.findOne({
+                periodStart: { $lte: range.start },
+                periodEnd: { $lte: range.end },
+            })
+
+            if(precomputed)
+                return precomputed.toObject()
+
+            // Fallback to real-time aggregation.
+            const [realTimeStats] = await aggregateStats(range);
+            return realTimeStats || this.getEmptyStats()
+        } catch (error){
+            throw new HttpException(500, "Error retrieving the statistics.");
+        }
+    }
+
+    private calculateStatsResponse(current: any, previous: any){
+        return {
+            totalChallenges: this.calculateMetric("totalChallenges", current, previous),
+            totalParticipants: this.calculateMetric("totalParticipants", current, previous),
+            completedChallenges: this.calculateMetric("completedChallenges", current, previous),
+            openChallenges: this.calculateMetric("openChallenges", current, previous),
+            onGoingChallenges: this.calculateMetric("onGoingChallenges", current, previous),
+        }
+    }
+
+    private calculateMetric(metric: string, current: any, previous: any){
+        const currentVal = current[metric] || 0
+        const previousVal = previous[metric] || 0
+
+        return {
+            current: currentVal,
+            previous: previousVal,
+            changePercent: this.calculatePercentage(currentVal, previousVal),
+        }
+    }
+
+    private calculatePercentage(current: number, previous: number){
+        if (previous === 0) return current > 0 ? 100 : 0
+        return Number(((current - previous) /  previous * 100)).toFixed(2)
+    }
+
+    private getEmptyStats(){
+        return {
+            totalChallenges: 0,
+            completedChallenges: 0,
+            openChallenges: 0,
+            onGoingChallenges: 0,
+            totalParticipants: 0
+        }
     }
 }

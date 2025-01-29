@@ -23,6 +23,11 @@ export enum Status {
     COMPLETED='completed'
 }
 
+export enum StatsFilter {
+    THIS_WEEK='this_week',
+    LAST_30_DAYS='last_30_days',
+}
+
 export enum Category {
     DESIGN='design',
     FRONTED='fronted',
@@ -135,16 +140,22 @@ export class ParticipateToChallengeDto {
     challengeId: string
 }
 
-export class PaginationData {
+export class ChallengePaginationData {
     @IsOptional()
     @IsPositive()
     public page: number = 1
 
     @IsOptional()
     @IsPositive()
-    public limit: number = 1
+    public limit: number = 6
 
     @IsOptional()
     @IsEnum(Status)
     public status: 'open' | 'ongoing' | 'completed' = 'open'
+}
+
+export class StatsQueryData {
+    @IsOptional()
+    @IsEnum(StatsFilter)
+    public filter: string = "this_week"
 }
