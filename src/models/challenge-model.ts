@@ -10,10 +10,12 @@ export interface IChallenge extends Document{
     projectBrief: string
     projectDescription: string[]
     projectRequirements: string[]
-    deliverables: string[],
-    createdBy: Types.ObjectId,
-    seniorityLevel: SeniorityLevel[],
+    deliverables: string[]
+    createdBy: Types.ObjectId
+    seniorityLevel: SeniorityLevel[]
     skillsNeeded: string[]
+    participants: Types.ObjectId[]
+
 }
 
 const ChallengeSchema = new Schema<IChallenge>(
@@ -35,6 +37,11 @@ const ChallengeSchema = new Schema<IChallenge>(
         skillsNeeded: [{
             type: String,
             required: true,
+        }],
+        participants: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: false,
         }]
     },
     {

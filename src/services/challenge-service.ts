@@ -6,20 +6,6 @@ import {isValidObjectId} from "mongoose";
 
 export default class ChallengeService {
 
-    /*
-
-    the challengeService level
-
-    * todo.2:: Getting all challenges created by a certain admin
-    * todo.3:: Getting all challenges without the one who created them
-    * todo.4:: How can I track the one who clicked on the challenge so as to
-               keep the one who is currently participating on the challenge.
-               so as to view the one challenge and also the currently active
-               participants of the challenge.
-
-    * todo.5:: Maintaining real-time data statistics
-    * */
-
     public async createChallenge(challengeRequest: CreateChallengeDto, createdBy: string){
         if(isEmpty(challengeRequest)) throw new HttpException(400, "Challenge request is empty");
 
