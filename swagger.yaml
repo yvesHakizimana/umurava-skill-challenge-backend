@@ -93,6 +93,7 @@ paths:
         500:
           description: Internal Server Error
 
+
     put:
       tags:
         - challenges
@@ -147,6 +148,47 @@ paths:
           description: Challenge not found
         500:
           description: Internal Server Error
+
+  /api/v1/challenges/{challengeId}/participants:
+    get:
+      tags:
+        - challenges
+      summary: Get participants of a challenge.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: challengeId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the challenge
+      responses:
+        200:
+          description: List of participants for the given challenge
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fullName:
+                      type: string
+                      description: Full name of the participant
+                    email:
+                      type: string
+                      format: email
+                      description: Email of the participant
+        400:
+          description: Bad request
+        403:
+          description: Forbidden - Admin access required.
+        404:
+          description: challenge not found.
+        500:
+          description: Internal Server Error
+
 
   /api/v1/auth/signup:
     post:
