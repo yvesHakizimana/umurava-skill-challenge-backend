@@ -10,6 +10,35 @@ paths:
       tags:
         - challenges
       summary: Get All Challenges
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number for pagination (default is 1)
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 6
+          description: Number of challenges per page (default is 6)
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - open
+              - ongoing
+              - completed
+            default: open
+          description: Filter challenges by status (default is "open")
+
       responses:
         200:
           description: List of Challenges
