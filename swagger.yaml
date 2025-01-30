@@ -45,6 +45,8 @@ paths:
     get:
       tags:
         - challenges
+      security:
+        - BearerAuth: [ ]
       summary: Get a challenge By ID
       parameters:
         - name: challengeId
@@ -65,9 +67,9 @@ paths:
     put:
       tags:
         - challenges
-      summary: Update a Challenge By ID
       security:
         - BearerAuth: [ ]
+      summary: Update a Challenge By ID
       parameters:
         - name: challengeId
           in: path
@@ -96,9 +98,9 @@ paths:
     delete:
       tags:
         - challenges
-      summary: Delete a Challenge by ID
       security:
         - BearerAuth: [ ]
+      summary: Delete a Challenge by ID
       parameters:
         - name: challengeId
           in: path
@@ -173,6 +175,9 @@ components:
         - projectDescription
         - projectRequirements
         - deliverables
+        - seniorityLevel
+        - category
+        - skillsNeeded
       properties:
         title:
           type: string
@@ -195,20 +200,45 @@ components:
           type: array
           items:
             type: string
-            maxLength: 20
+            maxLength: 255
           description: List of project Descriptions
         projectRequirements:
           type: array
           items:
             type: string
-            maxLength: 20
+            maxLength: 255
           description: List of project requirements
         deliverables:
           type: array
           items:
             type: string
-            maxLength: 20
+            maxLength: 255
           description: List of deliverables for the challenge
+        seniorityLevel:
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            type: string
+            enum:
+              - JUNIOR
+              - MID
+              - SENIOR
+          description: Seniority levels required (at least one, maximum three)
+        category:
+          type: string
+          enum:
+            - DESIGN
+            - FRONTED
+            - BACKEND
+            - FULLSTACK
+          description: Challenge category
+        skillsNeeded:
+          type: array
+          minItems: 1
+          items:
+            type: string
+          description: List of required skills.
 
     UpdateChallengeDto:
       type: object
@@ -234,20 +264,45 @@ components:
           type: array
           items:
             type: string
-            maxLength: 20
+            maxLength: 255
           description: List of project descriptions
         projectRequirements:
           type: array
           items:
             type: string
-            maxLength: 20
+            maxLength: 255
           description: List of project requirements
         deliverables:
           type: array
           items:
             type: string
-            maxLength: 20
+            maxLength: 255
           description: List of deliverables for the challenge
+        seniorityLevel:
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            type: string
+            enum:
+              - JUNIOR
+              - MID
+              - SENIOR
+          description: Seniority levels required (at least one, maximum three)
+        category:
+          type: string
+          enum:
+            - DESIGN
+            - FRONTED
+            - BACKEND
+            - FULLSTACK
+          description: Challenge category
+        skillsNeeded:
+          type: array
+          minItems: 1
+          items:
+            type: string
+          description: List of required skills.
 
     RegisterUserDto:
       type: object
