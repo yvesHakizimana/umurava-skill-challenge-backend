@@ -189,6 +189,55 @@ paths:
         500:
           description: Internal Server Error
 
+  /api/v1/challenges/stats:
+    get:
+      tags:
+        - challenges
+      summary: Get the overall statistics of the  system.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - this_week
+              - last_30_days
+            default: this_week
+          description: Filter stats by the time range (defaults to "this_week")
+      responses:
+        200:
+          description: Overall statistics of challenges
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalChallenges:
+                    type: integer
+                    description: Total number of all created challenges in the system.
+                  completedChallenges:
+                    type: integer
+                    description: Total number of completed challenged in the system.
+                  openChallenges:
+                    type: integer
+                    description: Total number of open challenges in the system are created but no active participation on it.
+                  onGoingChallenges:
+                    type: integer
+                    description: Total number of ongoing challenges in the system to mean they are open but people are participating on them.
+                  totalParticipants:
+                    type: integer
+                    description: Total number of active talents in the system.
+
+        400:
+          description: Bad request
+        403:
+          description: Forbidden- Admin Access required.
+        500:
+          description: Internal Server Error.
+
 
   /api/v1/auth/signup:
     post:
