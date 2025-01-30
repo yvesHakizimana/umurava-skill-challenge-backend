@@ -5,6 +5,50 @@ tags:
     description: Authentication-related operations
 
 paths:
+
+  /api/v1/auth/signup:
+    post:
+      tags:
+        - auth
+      summary: User Signup
+
+      requestBody:
+        description: User signup request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserDto'
+      responses:
+        201:
+          description: User registered successfully
+        400:
+          description: Bad Request
+        409:
+          description: Conflict
+        500:
+          description: Internal Server Error
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - auth
+      summary: User login
+      requestBody:
+        description: User authentication request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationUserDto'
+      responses:
+        200:
+          description: User authenticated successfully
+        400:
+          description: Bad request
+        500:
+          description: Internal Server Error
+
   /api/v1/challenges:
     get:
       tags:
@@ -271,49 +315,6 @@ paths:
           description: Challenge not found.
         500:
           description: Internal Server Error.
-
-  /api/v1/auth/signup:
-    post:
-      tags:
-        - auth
-      summary: User Signup
-
-      requestBody:
-        description: User signup request
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterUserDto'
-      responses:
-        201:
-          description: User registered successfully
-        400:
-          description: Bad Request
-        409:
-          description: Conflict
-        500:
-          description: Internal Server Error
-
-  /api/v1/auth/login:
-    post:
-      tags:
-        - auth
-      summary: User login
-      requestBody:
-        description: User authentication request
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AuthenticationUserDto'
-      responses:
-        200:
-          description: User authenticated successfully
-        400:
-          description: Bad request
-        500:
-          description: Internal Server Error
 
 components:
   schemas:
