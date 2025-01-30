@@ -26,7 +26,6 @@ export default class ChallengeRouter implements IRouter {
         // Getting all challenges but with pagination.
         this.router.get(
             `${this.path}`,
-            validationMiddleware(ChallengePaginationData, 'query'),
             this.challengeController.getAllChallenges
         );
 
@@ -38,14 +37,15 @@ export default class ChallengeRouter implements IRouter {
         );
 
         // Getting all participants participated/ participating on the challenge.
+        // ::todo:: not documented.
         this.router.get(
             `${this.path}/:challengeId/participants`,
             authMiddleware,
             isAdminMiddleware,
-            validationMiddleware(ChallengePaginationData, 'query'),
             this.challengeController.getParticipantDetails
         )
 
+        // ::todo:: not documented.
         this.router.get(
             `${this.path}/stats`,
             authMiddleware,
@@ -63,6 +63,7 @@ export default class ChallengeRouter implements IRouter {
             this.challengeController.createChallenge);
 
         // This is for someone who starts the challenge/ requests to start it
+        // todo:: not documented.
         this.router.patch(
             `${this.path}/:challengeId/participate`,
             authMiddleware,
