@@ -186,7 +186,7 @@ paths:
             enum:
               - this_week
               - last_30_days
-            default: this_week
+            default: "this_week"
           description: Filter stats by the time range (defaults to "this_week")
       responses:
         200:
@@ -201,7 +201,7 @@ paths:
                     description: Total number of all created challenges in the system.
                   completedChallenges:
                     type: integer
-                    description: Total number of completed challenged in the system.
+                    description: Total number of completed challenges in the system.
                   openChallenges:
                     type: integer
                     description: Total number of open challenges in the system are created but no active participation on it.
