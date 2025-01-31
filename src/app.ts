@@ -1,6 +1,6 @@
 import express from "express";
 import {connect, set} from "mongoose"
-import {CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN} from "@config";
+import {CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT} from "@config";
 import {logger, stream} from "@utils/logger";
 import morgan from "morgan";
 import cors from "cors";
@@ -17,7 +17,7 @@ require('../instrumentation')
 export default class App {
     public app: express.Application
     public env: string
-    public port: number | string
+    public port: number | string = PORT
 
     constructor(routes: IRouter[]) {
         this.app = express()
