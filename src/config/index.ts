@@ -8,8 +8,8 @@ export const CREDENTIALS = process.env.CREDENTIALS === 'true'
 export const {
     NODE_ENV,
     PORT,
-    DB_HOST,
-    DB_PORT,
+    DB_USERNAME,
+    DB_PASSWORD,
     DB_DATABASE,
     LOG_FORMAT,
     LOG_DIR,
