@@ -75,9 +75,10 @@ export default class ChallengeController {
 
     getParticipantDetails = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            const {challengeId} = req.params;
             const page = parseInt(req.query.page as string) || 1;
-            const limit = parseInt(req.query.limit as string) || 10;
-            const result = await this.challengeService.getParticipantDetails(req.currentUser.userId, page, limit);
+            const limit = parseInt(req.query.limit as string) || 6;
+            const result = await this.challengeService.getParticipantDetails(challengeId, page, limit);
             res.status(200).json(result);
         } catch (error){
             next(error)

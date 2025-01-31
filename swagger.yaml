@@ -80,7 +80,7 @@ paths:
               - open
               - ongoing
               - completed
-            default: open
+            default: 1
           description: Filter challenges by status (default is "open")
 
       responses:
@@ -113,6 +113,111 @@ paths:
           description: Forbidden
         500:
           description: Internal Server Error
+
+  /api/v1/challenges/{challengeId}/participants:
+    get:
+      tags:
+        - challenges
+      summary: Get participants of a challenge.
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: challengeId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the challenge
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number for pagination (default is 1)
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 6
+          description: Number of items per page (default is 6)
+      responses:
+        200:
+          description: List of participants for the given challenge
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    fullName:
+                      type: string
+                      description: Full name of the participant
+                    email:
+                      type: string
+                      format: email
+                      description: Email of the participant
+        400:
+          description: Bad request
+        403:
+          description: Forbidden - Admin access required.
+        404:
+          description: challenge not found.
+        500:
+          description: Internal Server Error
+
+  /api/v1/challenges/stats:
+    get:
+      tags:
+        - challenges
+      summary: Get the overall statistics of the  system.
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - this_week
+              - last_30_days
+            default: this_week
+          description: Filter stats by the time range (defaults to "this_week")
+      responses:
+        200:
+          description: Overall statistics of challenges
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalChallenges:
+                    type: integer
+                    description: Total number of all created challenges in the system.
+                  completedChallenges:
+                    type: integer
+                    description: Total number of completed challenged in the system.
+                  openChallenges:
+                    type: integer
+                    description: Total number of open challenges in the system are created but no active participation on it.
+                  onGoingChallenges:
+                    type: integer
+                    description: Total number of ongoing challenges in the system to mean they are open but people are participating on them.
+                  totalParticipants:
+                    type: integer
+                    description: Total number of active talents in the system.
+
+        400:
+          description: Bad request
+        403:
+          description: Forbidden- Admin Access required.
+        500:
+          description: Internal Server Error.
 
   /api/v1/challenges/{challengeId}:
     get:
@@ -192,95 +297,6 @@ paths:
           description: Challenge not found
         500:
           description: Internal Server Error
-
-  /api/v1/challenges/{challengeId}/participants:
-    get:
-      tags:
-        - challenges
-      summary: Get participants of a challenge.
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: challengeId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: Unique identifier of the challenge
-      responses:
-        200:
-          description: List of participants for the given challenge
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    fullName:
-                      type: string
-                      description: Full name of the participant
-                    email:
-                      type: string
-                      format: email
-                      description: Email of the participant
-        400:
-          description: Bad request
-        403:
-          description: Forbidden - Admin access required.
-        404:
-          description: challenge not found.
-        500:
-          description: Internal Server Error
-
-  /api/v1/challenges/stats:
-    get:
-      tags:
-        - challenges
-      summary: Get the overall statistics of the  system.
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: filter
-          in: query
-          required: false
-          schema:
-            type: string
-            enum:
-              - this_week
-              - last_30_days
-            default: this_week
-          description: Filter stats by the time range (defaults to "this_week")
-      responses:
-        200:
-          description: Overall statistics of challenges
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  totalChallenges:
-                    type: integer
-                    description: Total number of all created challenges in the system.
-                  completedChallenges:
-                    type: integer
-                    description: Total number of completed challenged in the system.
-                  openChallenges:
-                    type: integer
-                    description: Total number of open challenges in the system are created but no active participation on it.
-                  onGoingChallenges:
-                    type: integer
-                    description: Total number of ongoing challenges in the system to mean they are open but people are participating on them.
-                  totalParticipants:
-                    type: integer
-                    description: Total number of active talents in the system.
-
-        400:
-          description: Bad request
-        403:
-          description: Forbidden- Admin Access required.
-        500:
-          description: Internal Server Error.
 
   /api/v1/challenges/{challengeId}/participate:
     patch:
