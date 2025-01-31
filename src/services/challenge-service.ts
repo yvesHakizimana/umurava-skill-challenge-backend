@@ -123,37 +123,39 @@ export default class ChallengeService {
         );
     }
 
-    public async getParticipantDetails(challengeId: string, page: number = 1, limit: number = 10){
+    public async getParticipantDetails(challengeId: string, page: number = 1, limit: number = 6){
         if(!isValidObjectId(challengeId)) throw new HttpException(400, "Invalid challengeId format")
 
         if (page < 1) throw new HttpException(400, "Invalid page number")
         if (limit < 1) throw new HttpException(400, "Invalid limit number")
 
-        return  ChallengeModel.aggregate([
-            // Match phase of the pipeline.
+        return ChallengeModel.aggregate([
             { $match: { _id: new Types.ObjectId(challengeId) }},
-
-            // Lookup stage to fetch the details of the participants from the user's collection.
             { $lookup: {
                     from: 'users',
                     localField: 'participants',
                     foreignField: '_id',
-                    as: 'participants',
-                }
-            },
-
-            { $unwind: '$participants'}, // flatten the array.
-
-            {$skip: (page - 1) * limit},
-            {$limit: limit},
-
+                    as: 'participantsData',
+                }},
             { $project: {
-                _id: 0,
-                fullName: {$concat: ['$participants.firstName', ' ', '$participants.lastName']},
-                email: "$participants.email",
-                }
-            }
-        ])
+                    _id: 1,
+                    participants: {
+                        $slice: [
+                            { $map: {
+                                    input: '$participantsData',
+                                    as: 'participant',
+                                    in: {
+                                        fullName: { $concat: ['$$participant.firstName', ' ', '$$participant.lastName'] },
+                                        email: '$$participant.email'
+                                    }
+                                }},
+                            (page - 1) * limit,
+                            limit
+                        ]
+                    },
+                    totalParticipants: { $size: '$participantsData' }
+                }}
+        ]);
     }
 
     public async getChallengeStats(filter: string){

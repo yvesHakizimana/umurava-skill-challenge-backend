@@ -37,7 +37,6 @@ export default class ChallengeRouter implements IRouter {
         );
 
         // Getting all participants participated/ participating on the challenge.
-        // ::todo:: not documented.
         this.router.get(
             `${this.path}/:challengeId/participants`,
             authMiddleware,
@@ -45,7 +44,6 @@ export default class ChallengeRouter implements IRouter {
             this.challengeController.getParticipantDetails
         )
 
-        // ::todo:: not documented.
         this.router.get(
             `${this.path}/stats`,
             authMiddleware,
