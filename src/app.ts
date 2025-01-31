@@ -92,6 +92,9 @@ export default class App {
         routes.forEach(route => {
             this.app.use('/api/v1', route.router)
         })
+        this.app.get('/', (req, res) => {
+            res.status(200).send('It is okay the application is running.')
+        })
     }
 
 }
