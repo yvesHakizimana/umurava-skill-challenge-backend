@@ -22,10 +22,10 @@ export default class AuthenticationController {
     login = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const authenticateUserRequest = req.body
-            const token =  await this.authService.authenticateUser(authenticateUserRequest);
+            const result =  await this.authService.authenticateUser(authenticateUserRequest);
 
             res.status(200).json({
-                data: token,
+                data: result,
                 message: "Authentication went successfully",
             })
         } catch (error){

@@ -31,6 +31,9 @@ export default class AuthService {
             isAdmin: foundUser.isAdmin
         }
 
-        return sign(dataStoredInToken, ACCESS_TOKEN_SECRET_KEY, {expiresIn: "1h"})
+        return {
+            token: sign(dataStoredInToken, ACCESS_TOKEN_SECRET_KEY, {expiresIn: "1h"}),
+            isAdmin: dataStoredInToken.isAdmin
+        }
     }
 }
