@@ -19,7 +19,7 @@ export default class ChallengeController {
     createChallenge = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const challengeCreated = await this.challengeService.createChallenge(req.body, req.currentUser.userId);
-            res.status(200).json(
+            res.status(201).json(
                 { message: "Challenge is being created successfully", challenge: challengeCreated })
         } catch (error){
             next(error)
@@ -42,7 +42,7 @@ export default class ChallengeController {
         try {
             const page = parseInt(req.query.page as string) || 1;
             const limit = parseInt(req.query.limit as string) || 6;
-            const status = req.query.status as string || 'open';
+            const status = req.query.status as string;
             const result = await this.challengeService.getAllChallenges(page, limit, status);
             res.status(200).json(result);
         } catch (error){

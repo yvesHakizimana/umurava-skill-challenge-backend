@@ -131,7 +131,7 @@ paths:
               - open
               - ongoing
               - completed
-            default: 1
+            default: "open"
           description: Filter challenges by status (default is "open")
 
       responses:
@@ -233,7 +233,8 @@ paths:
           in: path
           description: ID of the challenge
           required: true
-          type: string
+          schema:
+            type: string
       responses:
         200:
           description: Challenge details
