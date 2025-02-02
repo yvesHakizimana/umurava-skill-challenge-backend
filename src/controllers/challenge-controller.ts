@@ -1,5 +1,6 @@
 import ChallengeService from "@services/challenge-service";
 import {NextFunction, Request, Response} from "express";
+import {logger} from "@utils/logger";
 
 export default class ChallengeController {
     private challengeService: ChallengeService = new ChallengeService();
@@ -85,9 +86,10 @@ export default class ChallengeController {
         }
     }
 
-    getChallengeStats = async (req: Request, res: Response, next: NextFunction) => {
+    getChallengeStatistics = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const filter = req.query.range as string || "this_week"
+            const filter = req.query.filter as string || "this_week"
+            logger.info(filter  + "is here ")
             const stats = await this.challengeService.getChallengeStats(filter);
             res.status(200).json(stats);
         } catch (error){

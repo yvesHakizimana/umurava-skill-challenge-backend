@@ -153,7 +153,7 @@ export default class ChallengeService {
                             limit
                         ]
                     },
-                    totalParticipants: { $size: '$participantsData' }
+                    totalParticipants: { $size: '$participantsData' },
                 }}
         ]);
     }

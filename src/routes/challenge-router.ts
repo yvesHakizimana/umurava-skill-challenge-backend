@@ -2,13 +2,7 @@ import {Router} from "express";
 import {IRouter} from "@routes/router-interface";
 import ChallengeController from "@controllers/challenge-controller";
 import validationMiddleware from "@middlewares/validation-middleware";
-import {
-    CreateChallengeDto,
-    ChallengePaginationData,
-    ParticipateToChallengeDto,
-    UpdateChallengeDto,
-    StatsQueryData
-} from "@dtos/challenge-dtos";
+import {CreateChallengeDto, ParticipateToChallengeDto, UpdateChallengeDto} from "@dtos/challenge-dtos";
 import authMiddleware from "@middlewares/auth-middleware";
 import isAdminMiddleware from "@middlewares/isadmin-middleware";
 
@@ -29,6 +23,7 @@ export default class ChallengeRouter implements IRouter {
             this.challengeController.getAllChallenges
         );
 
+
         // Getting a specific challenge details.
         this.router.get(
             `${this.path}/:challengeId`,
@@ -44,14 +39,6 @@ export default class ChallengeRouter implements IRouter {
             this.challengeController.getParticipantDetails
         )
 
-        this.router.get(
-            `${this.path}/stats`,
-            authMiddleware,
-            isAdminMiddleware,
-            validationMiddleware(StatsQueryData, 'query'),
-            this.challengeController.getChallengeStats
-        )
-
         // Creating a new challenge which will be done by the admin.
         this.router.post(
             `${this.path}`,
@@ -61,7 +48,6 @@ export default class ChallengeRouter implements IRouter {
             this.challengeController.createChallenge);
 
         // This is for someone who starts the challenge/ requests to start it
-        // todo:: not documented.
         this.router.patch(
             `${this.path}/:challengeId/participate`,
             authMiddleware,
