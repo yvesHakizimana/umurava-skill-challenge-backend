@@ -170,7 +170,7 @@ paths:
         500:
           description: Internal Server Error
 
-  /api/v1/challenges/stats:
+  /api/v1/admin/stats:
     get:
       tags:
         - challenges
@@ -241,7 +241,6 @@ paths:
           description: Challenge not found
         500:
           description: Internal Server Error
-
 
     put:
       tags:
