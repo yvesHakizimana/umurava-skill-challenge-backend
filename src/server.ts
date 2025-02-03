@@ -4,8 +4,8 @@ import AuthRouter from "@routes/auth-router";
 import AdminRouter from "@routes/admin-router";
 
 const app = new App(
-    [   new AdminRouter(),
-        new AuthRouter(),
+    [   new AuthRouter(),
+        new AdminRouter(),
         new ChallengeRouter()
     ]
 );
