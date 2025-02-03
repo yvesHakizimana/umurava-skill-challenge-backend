@@ -30,9 +30,9 @@ export const rescheduleChallengeCompletion = async (challengeId: string, newDead
 
 challengeQueue.process(async (job) => {
     const { challengeId } = job.data
-    await ChallengeModel.updateMany(
+    await ChallengeModel.findByIdAndUpdate(
         challengeId,
-        { $set: { status: 'completed'}},
+        { status: 'completed'},
         {new: true}
     )
 })
