@@ -96,4 +96,16 @@ export default class ChallengeController {
             next(error)
         }
     }
+
+    getTalentStats = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const talentId = req.currentUser.userId as string
+
+            const result = await this.challengeService.getTalentStatistics(talentId);
+
+            res.status(200).json(result);
+        } catch (error){
+            next(error)
+        }
+    }
 }

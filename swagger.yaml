@@ -165,6 +165,34 @@ paths:
         500:
           description: Internal Server Error
 
+  /api/v1/challenges/talent/stats:
+    get:
+      tags:
+        - challenges
+      summary: Get the overall stats of current loggedIn talent in the system.
+      security:
+        - BearerAuth: [ ]
+      responses:
+        200:
+          description: Overall stats of the current loggedIn talent in the  system.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalChallenges:
+                    type: integer
+                    description: Total number of the challenges on the currentLoggedIn user has access to.
+                  completedChallenges:
+                    type: integer
+                    description: Total number of the challenges the talent has participated on and the deadline passed.
+                  openChallenges:
+                    type: integer
+                    description: Total number of open challenges in the system that are created the talent can participate on.
+                  onGoingChallenges:
+                    type: integer
+                    description: Total number of ongoing challenges in the system that the current loggedIn talent is participating on.
+
   /api/v1/challenges/{challengeId}/participants:
     get:
       tags:

@@ -23,6 +23,11 @@ export default class ChallengeRouter implements IRouter {
             this.challengeController.getAllChallenges
         );
 
+        this.router.get(
+            `${this.path}/talent/stats`,
+            authMiddleware,
+            this.challengeController.getTalentStats
+        )
 
         // Getting a specific challenge details.
         this.router.get(

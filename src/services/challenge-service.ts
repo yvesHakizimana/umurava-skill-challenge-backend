@@ -170,6 +170,35 @@ export default class ChallengeService {
         return this.calculateStatsResponse(currentStats, previousStats)
     }
 
+    public async getTalentStatistics(talentId: string){
+        if(!isValidObjectId(talentId)) throw new HttpException(400, "Invalid talent id format")
+
+        const openChallenges = await ChallengeModel.countDocuments({
+            status: 'open',
+            participants: {$size: 0}
+        })
+
+        const ongoingChallenges = await ChallengeModel.countDocuments({
+            status: 'ongoing',
+            participants: talentId,
+            deadline: {$gte: new Date()},
+        })
+
+        const completedChallenges = await ChallengeModel.countDocuments({
+            participants: talentId,
+            deadline: {$lte: new Date()},
+        })
+
+        const allChallenges = openChallenges + ongoingChallenges + completedChallenges
+
+        return {
+            allChallenges,
+            openChallenges,
+            ongoingChallenges,
+            completedChallenges,
+        }
+    }
+
     private async getCombinedStats(range: DateRange){
         try {
             const precomputed = await ChallengeStat.findOne({
