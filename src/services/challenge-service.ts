@@ -60,7 +60,7 @@ export default class ChallengeService {
         return challengeFromDb
     }
 
-    public async updateChallengeById(challengeId: string, updateChallengeDto: UpdateChallengeDto){
+    public async updateChallengeById(challengeId: string, updateChallengeDto: Partial<UpdateChallengeDto>){
         if(isEmpty(challengeId)) throw new HttpException(400, "ChallengeId is empty");
 
         if(!isValidObjectId(challengeId)) throw new HttpException(400, "Invalid challengeId format")
