@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "scheduler:test": "ts-node-dev -r tsconfig-paths/register --transpile-only src/tests/scheduler-test.ts",
-    "performance:test": "k6 run src/load-test.js",
+    "performance:test": "k6 run tests/performance/load-test.js",
     "seed": "ts-node -r tsconfig-paths/register src/utils/seed.ts",
     "test:ui": "cross-env NODE_ENV=test vitest --ui",
     "test:coverage": "cross-env NODE_ENV=test  vitest --coverage",
