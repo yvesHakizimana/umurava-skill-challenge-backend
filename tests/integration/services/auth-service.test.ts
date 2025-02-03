@@ -1,4 +1,4 @@
-import {afterAll, afterEach, beforeAll, beforeEach, describe, expect, it} from "vitest";
+import {afterAll, beforeAll, describe, expect, it} from "vitest";
 import {GenericContainer} from "testcontainers";
 import AuthService from "../../../src/services/auth-service";
 import mongoose from "mongoose";
@@ -78,7 +78,7 @@ describe("Authentication service integration tests.", () => {
                 password: userData.password,
             }
 
-            const {token, isAdmin} = await authService.authenticateUser(authDto);
+            const {token} = await authService.authenticateUser(authDto);
 
             const payload = verify(token, process.env.ACCESS_TOKEN_SECRET_KEY) as {
                 userId: string;
