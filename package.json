@@ -4,8 +4,11 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "scheduler:test": "ts-node-dev -r tsconfig-paths/register --transpile-only src/tests/scheduler-test.ts",
     "performance:test": "k6 run src/load-test.js",
     "seed": "ts-node -r tsconfig-paths/register src/utils/seed.ts",
+    "test:ui": "cross-env NODE_ENV=test vitest --ui",
+    "test:coverage": "cross-env NODE_ENV=test  vitest --coverage",
     "dev": "ts-node-dev -r tsconfig-paths/register --watch swagger.yaml  --transpile-only src/server.ts",
     "build": "swc src -d dist --source-maps --copy-files",
     "deploy": "npm run build && node dist/src/server.js",
@@ -20,6 +23,7 @@
     "@opentelemetry/sdk-trace-node": "^1.30.1",
     "@types/k6": "^0.54.2",
     "@types/uuid": "^10.0.0",
+    "@vitest/ui": "^3.0.4",
     "bcrypt": "^5.1.1",
     "bull": "^4.16.5",
     "class-transformer": "^0.5.1",
@@ -27,6 +31,7 @@
     "class-validator-mongo-object-id": "^1.4.0",
     "compression": "^1.7.5",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "envalid": "^8.0.0",
     "express": "^4.21.2",
@@ -38,6 +43,7 @@
     "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
+    "testcontainers": "^10.17.2",
     "tslib": "^2.8.1",
     "uuid": "^11.0.5",
     "winston": "^3.17.0",
@@ -55,12 +61,14 @@
     "@types/morgan": "^1.9.9",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.7",
+    "@vitest/coverage-v8": "^3.0.4",
     "pm2": "^5.4.3",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "vitest": "^3.0.4"
   },
   "private": true
 }

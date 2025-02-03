@@ -1,0 +1,2 @@
+// @ts-ignore
+process.env.ACCESS_TOKEN_SECRET_KEY = "test-5a7fc631ecae108f96dab1f90501198c834a581ce746027971b3583e5d7aa3d0"

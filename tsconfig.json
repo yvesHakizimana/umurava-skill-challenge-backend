@@ -20,6 +20,7 @@
     "resolveJsonModule": true,
     "importHelpers": true,
     "baseUrl": "src",
+    "types": ["vitest/globals"],
     "paths": {
       "@/*": ["*"],
       "@config": ["config"],
@@ -32,7 +33,8 @@
       "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@tests/*": ["tests/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],
