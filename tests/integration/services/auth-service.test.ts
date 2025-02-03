@@ -1,10 +1,10 @@
 import {afterAll, beforeAll, describe, expect, it} from "vitest";
 import {GenericContainer} from "testcontainers";
-import AuthService from "../../../src/services/auth-service";
+import AuthService from "@services/auth-service";
 import mongoose from "mongoose";
-import UserModel from "../../../src/models/user-model";
-import {AuthenticateUserDto, RegisterUserDto} from "../../../src/dtos/auth-dtos";
-import HttpException from "../../../src/exceptions/http-exception";
+import UserModel from "@models/user-model";
+import {AuthenticateUserDto, RegisterUserDto} from "@dtos/auth-dtos";
+import HttpException from "@exceptions/http-exception";
 import {verify} from "jsonwebtoken"
 
 describe("Authentication service integration tests.", () => {
