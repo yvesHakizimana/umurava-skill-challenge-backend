@@ -19,5 +19,6 @@ export const {
     REDIS_PORT,
     REDIS_HOST,
     REDIS_PASSWORD,
+    REDIS_URL,
     REFRESH_TOKEN_SECRET_KEY,
 } = process.env
