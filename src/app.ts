@@ -97,7 +97,7 @@ export default class App {
 
     private connectToRedisDatabase() {
         this.redisClient = new Redis(REDIS_URL);
-        this.redisClient.on("connect", () => logger.info("Connected to Redis Database"));
+        this.redisClient.on("connect", () => logger.info("Connected to Redis Database successfully."));
         this.redisClient.on("error", (err: Error) => logger.error("❌ Redis connection failed", err));
     }
 

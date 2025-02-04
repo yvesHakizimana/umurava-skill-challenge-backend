@@ -1,9 +1,13 @@
 import {afterAll, beforeAll, describe, expect, it} from "vitest";
 import {GenericContainer} from "testcontainers";
+// @ts-ignore
 import AuthService from "@services/auth-service";
 import mongoose from "mongoose";
+// @ts-ignore
 import UserModel from "@models/user-model";
+// @ts-ignore
 import {AuthenticateUserDto, RegisterUserDto} from "@dtos/auth-dtos";
+// @ts-ignore
 import HttpException from "@exceptions/http-exception";
 import {verify} from "jsonwebtoken"
 
