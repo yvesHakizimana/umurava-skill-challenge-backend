@@ -1,7 +1,6 @@
 import Queue from "bull";
 import {aggregateStats, ChallengeStat, getDateRanges} from "@models/statistics-model";
 import {logger} from "@utils/logger";
-import {redisConfig} from "@databases";
 import {REDIS_URL} from "@config";
 
 // Create a new queue for statistics
