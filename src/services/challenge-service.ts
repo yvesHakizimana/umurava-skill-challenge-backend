@@ -86,9 +86,12 @@ export default class ChallengeService {
 
         if(!isValidObjectId(challengeId)) throw new HttpException(400, "Invalid challengeId format")
 
-        const deletedChallenge = await ChallengeModel.findByIdAndDelete(challengeId)
-        await removeScheduledCompletion(deletedChallenge._id as string)
-        return deletedChallenge
+        const challengeFromDb = await ChallengeModel.findById(challengeId);
+
+        if(!challengeFromDb) throw new HttpException(400, `Challenge with this ${challengeId} does not exist`);
+
+        await ChallengeModel.deleteOne({_id: challengeId})
+        await removeScheduledCompletion(challengeId as string)
     }
 
     public async startChallenge(challengeId: string, participantId: string){
