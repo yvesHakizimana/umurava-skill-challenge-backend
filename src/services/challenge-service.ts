@@ -214,6 +214,21 @@ export default class ChallengeService {
         }
     }
 
+    public async checkParticipationStatus(challengeId: string, participantId: string){
+        let isParticipating = false
+        if(!isValidObjectId(challengeId) || !isValidObjectId(participantId))
+            throw new HttpException(400, "Invalid participant or challengeIds.")
+
+        const challenge = await ChallengeModel.findById(challengeId);
+        if(!challenge) throw new HttpException(400, "Challenge does not exist");
+
+        // @ts-ignore
+        if(challenge.participants.includes(participantId)){
+            isParticipating = true
+        }
+        return isParticipating
+    }
+
     private async getCombinedStats(range: DateRange){
         try {
             const precomputed = await ChallengeStat.findOne({

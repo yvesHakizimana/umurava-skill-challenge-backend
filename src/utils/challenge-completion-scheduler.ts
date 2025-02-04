@@ -3,7 +3,7 @@ import ChallengeModel from "@models/challenge-model";
 import {REDIS_URL} from "@config";
 
 // @ts-ignore
-const challengeQueue = new Queue("challenge-queue", REDIS_URL, {redis: {tls: true, enableTLSForSentinelMode: false}})
+const challengeQueue = new Queue("challenge-queue", REDIS_URL, {redis: {tls: true, enableTLSForSentinelMode: false, maxRetriesPerRequest: null}})
 
 export async function scheduleChallengeCompletion(challengeId: string, deadline: Date){
     const delay = deadline.getTime() - Date.now();
