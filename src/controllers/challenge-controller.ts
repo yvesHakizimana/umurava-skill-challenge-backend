@@ -108,4 +108,15 @@ export default class ChallengeController {
             next(error)
         }
     }
+
+    checkParticipationStatus = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const {challengeId} = req.params;
+            const participationStatus = await this.challengeService.checkParticipationStatus(challengeId, req.currentUser.userId)
+            res.status(200).json(
+                { message: "Participation status retrieved successfully", participationStatus })
+        } catch (error){
+            next(error)
+        }
+    }
 }

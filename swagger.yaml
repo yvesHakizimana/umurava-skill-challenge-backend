@@ -362,6 +362,44 @@ paths:
         500:
           description: Internal Server Error.
 
+  /api/v1/challenges/{challengeId}/participation-status:
+    get:
+      tags:
+        - challenges
+      summary: Retrieve the participation status of a talent on a given challenge.
+      security:
+        - BearerAuth: [ ]
+      parameters:
+        - name: challengeId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the challenge.
+      responses:
+        200:
+          description: Participation status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Participation status retrieved successfully"
+                  participationStatus:
+                    type: boolean
+                    example: true
+
+        400:
+          description: Bad Request - Invalid challenge ID or user already participating.
+        401:
+          description: Unauthorized -  User must be authenticated.
+        404:
+          description: Challenge not found.
+        500:
+          description: Internal Server Error.
+
 components:
   schemas:
     CreateChallengeDto:
