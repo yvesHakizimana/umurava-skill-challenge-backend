@@ -28,7 +28,7 @@ export default class ChallengeRouter implements IRouter {
             `${this.path}/:challengeId/participation-status`,
             authMiddleware,
             validationMiddleware(ParticipateToChallengeDto, 'params'),
-            this.challengeController.startChallenge)
+            this.challengeController.checkParticipationStatus)
 
         this.router.get(
             `${this.path}/talent/stats`,
