@@ -1,6 +1,6 @@
 import express from "express";
 import {connect, set} from "mongoose"
-import {CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT} from "@config";
+import {CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT, REDIS_URL} from "@config";
 import {logger, stream} from "@utils/logger";
 import morgan from "morgan";
 import cors from "cors";
@@ -10,7 +10,7 @@ import compression from "compression";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express"
 import errorMiddleware from "@middlewares/error-middleware";
-import {mongoDbConnection, redisConfig} from "@databases";
+import {mongoDbConnection} from "@databases";
 import {IRouter} from "@routes/router-interface";
 import {initializeStatsScheduler} from "@utils/stats-computation-scheduler";
 import {Redis} from "ioredis";
@@ -28,10 +28,7 @@ export default class App {
         this.env = NODE_ENV || 'development'
         this.port = process.env.PORT || 3000
 
-        // this.connectToRedisDatabase()
-        //     .then(() => {
-        //     logger.info("Connected to Redis Database")})
-        //     .catch((err: Error) => logger.error("Failed to connect to Redis Database", err))
+        this.connectToRedisDatabase()
         this.connectToMongoDbDatabase()
             .then(() => {
             logger.info(`Connected to the database successfully.`);
@@ -98,33 +95,10 @@ export default class App {
         await connect(mongoDbConnection.url);
     }
 
-    private async connectToRedisDatabase() {
-        try {
-            this.redisClient = new Redis({
-                port: redisConfig.redis.port,
-                host: redisConfig.redis.host,
-                password: redisConfig.redis.password,
-                username: redisConfig.redis.username
-            });
-
-            // Attach all event listeners immediately
-            this.redisClient.on("connect", () => logger.info("✅ Connected to Redis successfully!"));
-            this.redisClient.on("ready", () => logger.info("🚀 Redis is ready to use!"));
-            this.redisClient.on("error", (err) => logger.error("❌ Redis connection error:", err));
-            this.redisClient.on("reconnecting", () => logger.warn("🔄 Redis is reconnecting..."));
-            this.redisClient.on("end", () => logger.warn("⚠️ Redis connection closed."));
-
-            // Wait for the connection to be ready
-            await new Promise((resolve, reject) => {
-                this.redisClient.once('ready', resolve);
-                this.redisClient.once('error', reject);
-            });
-
-            logger.info("Connected to Redis Database");
-        } catch (error) {
-            logger.error("❌ Failed to connect to Redis:", error);
-            throw error; // Ensure the error propagates to the caller
-        }
+    private connectToRedisDatabase() {
+        this.redisClient = new Redis(REDIS_URL);
+        this.redisClient.on("connect", () => logger.info("Connected to Redis Database"));
+        this.redisClient.on("error", (err: Error) => logger.error("❌ Redis connection failed", err));
     }
 
     private initializeRoutes(routes: IRouter[]){
