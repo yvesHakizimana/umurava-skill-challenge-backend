@@ -5,7 +5,7 @@ import {REDIS_URL} from "@config";
 
 // Create a new queue for statistics
 // @ts-ignore
-export const statsQueue = new Queue("statistics-queue", REDIS_URL, {redis: {tls: true, enableTLSForSentinelMode: false}});
+export const statsQueue = new Queue("statistics-queue", REDIS_URL, {redis: {tls: true, enableTLSForSentinelMode: false, maxRetriesPerRequest: null}});
 
 // Daily stats generation scheduler
 export async function scheduleDailyStats() {
