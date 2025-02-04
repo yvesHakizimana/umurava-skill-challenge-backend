@@ -10,7 +10,7 @@ export const mongoDbConnection = {
 
 export const redisConfig = {
     redis: {
-        port: REDIS_PORT,
+        port: parseInt(REDIS_PORT),
         host: REDIS_HOST,
         username: REDIS_USERNAME || "",
         password: REDIS_PASSWORD || "",

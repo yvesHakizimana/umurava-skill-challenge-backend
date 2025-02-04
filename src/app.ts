@@ -98,22 +98,32 @@ export default class App {
         await connect(mongoDbConnection.url);
     }
 
-    private async connectToRedisDatabase(){
+    private async connectToRedisDatabase() {
         try {
             this.redisClient = new Redis({
-                port: parseInt(redisConfig.redis.port),
+                port: redisConfig.redis.port,
                 host: redisConfig.redis.host,
                 password: redisConfig.redis.password,
                 username: redisConfig.redis.username
-            })
+            });
 
-            this.redisClient.on("connect", () => logger.info("✅ Connected to Redis successfully!"))
+            // Attach all event listeners immediately
+            this.redisClient.on("connect", () => logger.info("✅ Connected to Redis successfully!"));
             this.redisClient.on("ready", () => logger.info("🚀 Redis is ready to use!"));
             this.redisClient.on("error", (err) => logger.error("❌ Redis connection error:", err));
             this.redisClient.on("reconnecting", () => logger.warn("🔄 Redis is reconnecting..."));
             this.redisClient.on("end", () => logger.warn("⚠️ Redis connection closed."));
+
+            // Wait for the connection to be ready
+            await new Promise((resolve, reject) => {
+                this.redisClient.once('ready', resolve);
+                this.redisClient.once('error', reject);
+            });
+
+            logger.info("Connected to Redis Database");
         } catch (error) {
-            logger.error("❌ Failed to connect to Redis:", error)
+            logger.error("❌ Failed to connect to Redis:", error);
+            throw error; // Ensure the error propagates to the caller
         }
     }
 
