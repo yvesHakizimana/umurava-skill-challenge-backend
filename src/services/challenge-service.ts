@@ -5,13 +5,19 @@ import ChallengeModel from "@models/challenge-model"
 import {isValidObjectId, Types} from "mongoose";
 import {removeScheduledCompletion, rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/challenge-completion-scheduler";
 import {aggregateStats, ChallengeStat, DateRange, getDateRanges} from "@models/statistics-model";
+import {logger} from "@utils/logger";
 
 export default class ChallengeService {
 
     public async createChallenge(challengeRequest: CreateChallengeDto, createdBy: string){
         if(isEmpty(challengeRequest)) throw new HttpException(400, "Challenge request is empty");
         const challenge = await ChallengeModel.create({...challengeRequest, createdBy})
-        await scheduleChallengeCompletion(challenge._id as string, challenge.deadline)
+
+        try {
+            await scheduleChallengeCompletion(challenge._id as string, challenge.deadline)
+        } catch (error){
+            logger.error(`reschedule challenge completion failed for ${ challenge._id as string }`, error);
+        }
         return challenge
     }
 
@@ -75,9 +81,11 @@ export default class ChallengeService {
                 ...updateChallengeDto,
             }
         }, {new: true});
-
-        //
-        await rescheduleChallengeCompletion(challengeFromDb._id as string, updatedChallenge.deadline)
+        try {
+            await rescheduleChallengeCompletion(challengeFromDb._id as string, updatedChallenge.deadline)
+        } catch (error){
+            logger.error(`reschedule challenge completion failed for ${ challengeId }`, error);
+        }
         return updatedChallenge
     }
 
@@ -86,12 +94,16 @@ export default class ChallengeService {
 
         if(!isValidObjectId(challengeId)) throw new HttpException(400, "Invalid challengeId format")
 
-        const challengeFromDb = await ChallengeModel.findById(challengeId);
+        const deletedChallenge = await ChallengeModel.findByIdAndDelete(challengeId);
 
-        if(!challengeFromDb) throw new HttpException(400, `Challenge with this ${challengeId} does not exist`);
+        if(!deletedChallenge)
+            throw new HttpException(404, `Challenge ${challengeId} not found.`);
 
-        await ChallengeModel.deleteOne({_id: challengeId})
-        await removeScheduledCompletion(challengeId as string)
+        try {
+            await removeScheduledCompletion(deletedChallenge._id as string)
+        } catch (error){
+            logger.error(`Cleanup failed for ${ challengeId }`, error);
+        }
     }
 
     public async startChallenge(challengeId: string, participantId: string){
