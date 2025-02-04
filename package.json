@@ -11,7 +11,7 @@
     "test:coverage": "cross-env NODE_ENV=test  vitest --coverage",
     "dev": "ts-node-dev -r tsconfig-paths/register --watch swagger.yaml  --transpile-only src/server.ts",
     "build": "swc src -d dist --source-maps --copy-files",
-    "deploy": "npm run build && node dist/src/server.js",
+    "deploy": "npm run build && pm2 start dist/src/server.js",
     "deploy:server": "npm run build && pm2 start ecosystem.config.js"
   },
   "dependencies": {

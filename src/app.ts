@@ -13,7 +13,7 @@ import errorMiddleware from "@middlewares/error-middleware";
 import {mongoDbConnection} from "@databases";
 import {IRouter} from "@routes/router-interface";
 import {initializeStatsScheduler} from "@utils/stats-computation-scheduler";
-require('../instrumentation')
+require('./instrumentation')
 
 export default class App {
     public app: express.Application
