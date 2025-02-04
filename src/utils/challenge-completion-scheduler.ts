@@ -1,7 +1,9 @@
 import Queue from "bull"
 import ChallengeModel from "@models/challenge-model";
+import {redisConfig} from "@databases";
 
-const challengeQueue = new Queue("challenge-queue")
+// @ts-ignore
+const challengeQueue = new Queue("challenge-queue", redisConfig)
 
 export async function scheduleChallengeCompletion(challengeId: string, deadline: Date){
     const delay = deadline.getTime() - Date.now();

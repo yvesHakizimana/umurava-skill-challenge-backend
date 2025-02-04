@@ -1,9 +1,11 @@
 import Queue from "bull";
 import {aggregateStats, ChallengeStat, getDateRanges} from "@models/statistics-model";
 import {logger} from "@utils/logger";
+import {redisConfig} from "@databases";
 
 // Create a new queue for statistics
-export const statsQueue = new Queue("statistics-queue");
+// @ts-ignore
+export const statsQueue = new Queue("statistics-queue", redisConfig);
 
 // Daily stats generation scheduler
 export async function scheduleDailyStats() {

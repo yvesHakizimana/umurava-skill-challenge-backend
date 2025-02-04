@@ -15,5 +15,8 @@ export const {
     LOG_DIR,
     ORIGIN,
     ACCESS_TOKEN_SECRET_KEY,
+    REDIS_USER,
+    REDIS_PORT,
+    REDIS_HOST,
     REFRESH_TOKEN_SECRET_KEY,
 } = process.env
