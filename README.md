@@ -116,7 +116,7 @@ The repository is organized to promote scalability and maintainability:
 │   │   └── challenge-service.ts
 │   ├── utils/                    # Utility functions and helpers
 │   │   ├── logger.ts             # Global logging
-│   │   ├── scheduler.ts          # Scheduler for automatic challenge completions
+│   │   ├── challenge-completion-scheduler.ts          # Scheduler for automatic challenge completions
 │   │   ├── is-empty.ts           # Utility for handling empty requests/responses
 │   │   └── seed.ts               # Database seeding utility
 │   ├── app.ts                    # Express app initialization
