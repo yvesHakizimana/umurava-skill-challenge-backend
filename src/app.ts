@@ -28,10 +28,10 @@ export default class App {
         this.env = NODE_ENV || 'development'
         this.port = process.env.PORT || 3000
 
-        this.connectToRedisDatabase()
-            .then(() => {
-            logger.info("Connected to Redis Database")})
-            .catch((err: Error) => logger.error("Failed to connect to Redis Database", err))
+        // this.connectToRedisDatabase()
+        //     .then(() => {
+        //     logger.info("Connected to Redis Database")})
+        //     .catch((err: Error) => logger.error("Failed to connect to Redis Database", err))
         this.connectToMongoDbDatabase()
             .then(() => {
             logger.info(`Connected to the database successfully.`);
