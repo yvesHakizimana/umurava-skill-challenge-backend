@@ -3,6 +3,7 @@ import {DB_DATABASE, DB_PASSWORD, DB_USERNAME} from "@config";
 import UserModel from "@models/user-model";
 import ChallengeModel from "@models/challenge-model";
 import {hashSync} from "bcrypt";
+import {ChallengeStat} from "@models/statistics-model";
 
 async function seedDatabase(){
     try {
@@ -10,6 +11,7 @@ async function seedDatabase(){
         // Clear existing data
         await UserModel.deleteMany({});
         await ChallengeModel.deleteMany({});
+        await ChallengeStat.deleteMany({});
 
         // Create Users
         const users = [];
