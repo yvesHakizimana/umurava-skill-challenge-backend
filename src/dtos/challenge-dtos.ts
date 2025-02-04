@@ -30,7 +30,7 @@ export enum StatsFilter {
 
 export enum Category {
     DESIGN='design',
-    FRONTED='fronted',
+    FRONTEND='frontend',
     BACKEND='backend',
     FULLSTACK='fullstack'
 }
