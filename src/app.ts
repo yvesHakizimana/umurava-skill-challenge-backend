@@ -12,6 +12,7 @@ import swaggerUi from "swagger-ui-express"
 import errorMiddleware from "@middlewares/error-middleware";
 import {mongoDbConnection} from "@databases";
 import {IRouter} from "@routes/router-interface";
+import {initializeStatsScheduler} from "@utils/stats-computation-scheduler";
 require('../instrumentation')
 
 export default class App {
@@ -37,7 +38,9 @@ export default class App {
     }
 
     public listen() {
-        this.app.listen(this.port, () => {
+        this.app.listen(this.port, async () => {
+            logger.info("Starting the Statistics scheduler.------")
+            await initializeStatsScheduler()
             logger.info(`========================================`);
             logger.info(`=====------- ENV: ${this.env} -----=====`);
             logger.info(`🚀 App listening on the port ${this.port}`);
@@ -93,7 +96,7 @@ export default class App {
             this.app.use('/api/v1', route.router)
         })
         this.app.get('/', (req, res) => {
-            res.status(200).send('It is okay the application is running.')
+            res.status(200).send('App is running successfully');
         })
     }
 

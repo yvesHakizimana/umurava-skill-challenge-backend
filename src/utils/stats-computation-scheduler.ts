@@ -1,7 +1,6 @@
 import Queue from "bull";
-import { ChallengeStat } from "@models/statistics-model";
-import { aggregateStats, getDateRanges } from "@models/statistics-model";
-import { logger } from "@utils/logger";
+import {aggregateStats, ChallengeStat, getDateRanges} from "@models/statistics-model";
+import {logger} from "@utils/logger";
 
 // Create a new queue for statistics
 export const statsQueue = new Queue("statistics-queue");
@@ -24,7 +23,6 @@ export async function scheduleDailyStats() {
 // Process the statistics generation job
 statsQueue.process(async () => {
     try {
-        const now = new Date();
         const { current: dateRange } = getDateRanges("last_30_days");
 
         // Check if stats already exist for this period
