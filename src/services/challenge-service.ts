@@ -3,7 +3,7 @@ import {isEmpty} from "@utils/is-empty";
 import HttpException from "@exceptions/http-exception";
 import ChallengeModel from "@models/challenge-model"
 import {isValidObjectId, Types} from "mongoose";
-import {removeScheduledCompletion, rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/scheduler";
+import {removeScheduledCompletion, rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/challenge-completion-scheduler";
 import {aggregateStats, ChallengeStat, DateRange, getDateRanges} from "@models/statistics-model";
 
 export default class ChallengeService {

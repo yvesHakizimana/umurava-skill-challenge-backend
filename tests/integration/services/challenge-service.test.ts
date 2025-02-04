@@ -4,12 +4,12 @@ import {afterAll, beforeAll, beforeEach, describe, expect, it, vi} from "vitest"
 import ChallengeService from "@services/challenge-service"
 import ChallengeModel from "@models/challenge-model";
 import {ChallengeStat} from "@models/statistics-model";
-import {rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/scheduler";
-import {Category, SeniorityLevel, UpdateChallengeDto} from "../../../src/dtos/challenge-dtos";
+import {rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/challenge-completion-scheduler";
+import {Category, SeniorityLevel, UpdateChallengeDto} from "@dtos/challenge-dtos";
 import UserModel from "@models/user-model";
 
 // Mock scheduling utilities
-vi.mock("@utils/scheduler", () => ({
+vi.mock("@utils/challenge-completion-scheduler", () => ({
     scheduleChallengeCompletion: vi.fn(),
     rescheduleChallengeCompletion: vi.fn(),
     removeScheduledCompletion: vi.fn(),
