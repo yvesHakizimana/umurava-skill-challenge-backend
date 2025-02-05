@@ -4,6 +4,7 @@ import winston from "winston";
 import winstonDaily from 'winston-daily-rotate-file'
 import {LOG_DIR} from "@config";
 import {context, trace} from "@opentelemetry/api";
+import {OpenTelemetryTransportV3} from "@opentelemetry/winston-transport";
 
 const logDir = join(__dirname, LOG_DIR || 'logs')
 
@@ -49,7 +50,8 @@ const logger = winston.createLogger({
             maxFiles: 30, // 30 Days saved.
             json: false,
             zippedArchive: true,
-        })
+        }),
+        new OpenTelemetryTransportV3()
     ]
 })
 
