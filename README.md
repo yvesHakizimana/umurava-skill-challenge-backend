@@ -83,7 +83,8 @@ The repository is organized to promote scalability and maintainability:
 │   │   ├── auth-service.test.ts
 │   │   └── challenge-service.test.ts
 │   └── performance/              # k6 scripts for performance testing
-│       └── load-test.js
+│       └── auth-load-test.js
+        |__ challenge-load-test.js
 ├── monitoring/                   # Grafana and Prometheus configuration files
 ├── src/                          # Main source code
 │   ├── config/                   # Environment and project configurations
