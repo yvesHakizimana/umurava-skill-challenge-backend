@@ -1,6 +1,7 @@
 import Queue from "bull"
 import ChallengeModel from "@models/challenge-model";
 import {REDIS_URL} from "@config";
+import {clearChallengeCache} from "@services/challenge-service";
 
 // @ts-ignore
 const challengeQueue = new Queue("challenge-queue", REDIS_URL, {redis: {tls: true, enableTLSForSentinelMode: false, maxRetriesPerRequest: null}})
@@ -37,4 +38,6 @@ challengeQueue.process(async (job) => {
         { status: 'completed'},
         {new: true}
     )
+    // for resetting the cache to reflect the things which has been updated.
+    await clearChallengeCache()
 })

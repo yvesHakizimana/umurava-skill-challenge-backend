@@ -320,7 +320,7 @@ const generateCacheKey = (page: number, limit: number, status?: string): string 
 };
 
 // Clearing the cache in case there is a modification to the data.
-const clearChallengeCache = async () => {
+export const clearChallengeCache = async () => {
     const keys = await redisClient.keys(`${CACHE_PREFIX}:*`);
     if (keys.length > 0) {
         await redisClient.del(keys);
