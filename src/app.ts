@@ -1,6 +1,6 @@
 import express from "express";
 import {connect, set} from "mongoose"
-import {CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT, REDIS_URL} from "@config";
+import {CREDENTIALS, LOG_FORMAT, NODE_ENV, ORIGIN, PORT} from "@config";
 import {logger, stream} from "@utils/logger";
 import morgan from "morgan";
 import cors from "cors";
@@ -13,7 +13,6 @@ import errorMiddleware from "@middlewares/error-middleware";
 import {mongoDbConnection} from "@databases";
 import {IRouter} from "@routes/router-interface";
 import {initializeStatsScheduler} from "@utils/stats-computation-scheduler";
-import {Redis} from "ioredis";
 
 require('./instrumentation')
 
@@ -21,14 +20,12 @@ export default class App {
     public app: express.Application
     public env: string
     public port: number | string = PORT
-    public redisClient: Redis | null = null;
 
     constructor(routes: IRouter[]) {
         this.app = express()
         this.env = NODE_ENV || 'development'
         this.port = process.env.PORT || 3000
 
-        this.connectToRedisDatabase()
         this.connectToMongoDbDatabase()
             .then(() => {
             logger.info(`Connected to the database successfully.`);
@@ -93,12 +90,6 @@ export default class App {
             set('debug', true)
         }
         await connect(mongoDbConnection.url);
-    }
-
-    private connectToRedisDatabase() {
-        this.redisClient = new Redis(REDIS_URL);
-        this.redisClient.on("connect", () => logger.info("Connected to Redis Database successfully."));
-        this.redisClient.on("error", (err: Error) => logger.error("❌ Redis connection failed", err));
     }
 
     private initializeRoutes(routes: IRouter[]){
