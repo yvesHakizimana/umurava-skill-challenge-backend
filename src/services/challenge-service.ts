@@ -3,9 +3,17 @@ import {isEmpty} from "@utils/is-empty";
 import HttpException from "@exceptions/http-exception";
 import ChallengeModel from "@models/challenge-model"
 import {isValidObjectId, Types} from "mongoose";
-import {removeScheduledCompletion, rescheduleChallengeCompletion, scheduleChallengeCompletion} from "@utils/challenge-completion-scheduler";
+import {
+    removeScheduledCompletion,
+    rescheduleChallengeCompletion,
+    scheduleChallengeCompletion
+} from "@utils/challenge-completion-scheduler";
 import {aggregateStats, ChallengeStat, DateRange, getDateRanges} from "@models/statistics-model";
 import {logger} from "@utils/logger";
+import {redisClient} from "@/databases/redis.config";
+
+const CACHE_PREFIX = "challenges";
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 1HR.
 
 export default class ChallengeService {
 
@@ -18,6 +26,8 @@ export default class ChallengeService {
         } catch (error){
             logger.error(`reschedule challenge completion failed for ${ challenge._id as string }`, error);
         }
+        await clearChallengeCache()
+        logger.info("Cleared the cache successfully. and Created a new challenge successfully.")
         return challenge
     }
 
@@ -25,6 +35,17 @@ export default class ChallengeService {
         // Validation of the page and limit
         if(page < 1) throw new HttpException(400, "Page must be greater than 0.")
         if(limit < 1) throw new HttpException(400, "Limit must be greater than 0.")
+
+        const cacheKey = generateCacheKey(page, limit, status)
+
+        // trying to get the data from the cache.
+        const cachedData = await redisClient.get(cacheKey)
+        if(cachedData) {
+            logger.info("Cache was hit, just retrieving the data from the cache.")
+            return JSON.parse(cachedData);
+        }
+
+        logger.info("Cache was missed then fetching data from db.........")
 
         // Build the query
         const query: any = {}
@@ -43,7 +64,7 @@ export default class ChallengeService {
 
         const totalChallenges = await ChallengeModel.countDocuments(query)
 
-        return {
+        const result =  {
             data: challenges,
             pagination: {
                 page,
@@ -52,6 +73,10 @@ export default class ChallengeService {
                 totalPages: Math.ceil(totalChallenges / limit),
             }
         }
+
+        await redisClient.setex(cacheKey, CACHE_TTL, JSON.stringify(result))
+
+        return result;
     }
 
     public async getChallenge(challengeId: string){
@@ -86,6 +111,8 @@ export default class ChallengeService {
         } catch (error){
             logger.error(`reschedule challenge completion failed for ${ challengeId }`, error);
         }
+        await clearChallengeCache()
+        logger.info("Cleared the cache successfully. and updated the challenge successfully.")
         return updatedChallenge
     }
 
@@ -98,6 +125,9 @@ export default class ChallengeService {
 
         if(!deletedChallenge)
             throw new HttpException(404, `Challenge ${challengeId} not found.`);
+
+        await clearChallengeCache()
+        logger.info("Cleared the cache successfully. and deleted the  challenge successfully.")
 
         try {
             await removeScheduledCompletion(deletedChallenge._id as string)
@@ -283,3 +313,16 @@ export default class ChallengeService {
         }
     }
 }
+
+// Some redis helper functions.
+const generateCacheKey = (page: number, limit: number, status?: string): string => {
+    return `${CACHE_PREFIX}:page:${page}:limit:${limit}:status:${status || 'all'}`;
+};
+
+// Clearing the cache in case there is a modification to the data.
+const clearChallengeCache = async () => {
+    const keys = await redisClient.keys(`${CACHE_PREFIX}:*`);
+    if (keys.length > 0) {
+        await redisClient.del(keys);
+    }
+};
