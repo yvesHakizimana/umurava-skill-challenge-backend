@@ -1,72 +1,63 @@
-version: '3.8'
+version: '3'
 
 services:
-  umurava_proxy:
-    image: nginx:alpine
-    container_name: proxy
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    restart: 'unless-stopped'
-    depends_on:
-      - umurava_server
-    networks:
-      - backend
-
-  umurava_server:
-    build:
-      context: ./
-      target: development-build-stage
-      dockerfile: Dockerfile
-    container_name: server
+  server:
+    build: .
     ports:
       - "3000:3000"
-    volumes:
-      - ./:/app
-      - node_modules:/app/node_modules
-    restart: 'unless-stopped'
-    networks:
-      - backend
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  umurava_prometheus:
-    image: prom/prometheus
-    container_name: prometheus_umurava
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-    restart: unless-stopped
-    networks:
-      - backend
-
-  umurava_grafana:
-    image: grafana/grafana:latest
-    container_name: grafana_umurava
-    ports:
-      - "3001:3000"
-    volumes:
-        - ./monitoring/datasources:/etc/grafana/provisioning/datasources
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    restart: unless-stopped
-    networks:
-      - backend
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+    depends_on:
+      - otel-collector
 
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./monitoring/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "12347:12345"
+      - "12348:12348"
+      - "6832:6832"
+      - "55679:55679"
+    depends_on:
+      - tempo
+      - loki
+      - mimir
 
-networks:
-  backend:
-    driver: bridge
+  tempo:
+    image: grafana/tempo:latest
+    command: ["-config.file=/etc/tempo.yaml"]
+    ports:
+      - "3200:3200"
+    volumes:
+      - ./monitoring/tempo/tempo.yaml:/etc/tempo.yaml
 
-volumes:
-  data:
-    driver: local
-  node_modules:
-    driver: local
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./monitoring/loki/loki.yaml:/etc/loki.yaml
+
+  mimir:
+    image: grafana/mimir:latest
+    command: ["-config.file=/etc/mimir.yaml"]
+    ports:
+      - "9009:9009"
+    volumes:
+      - ./monitoring/mimir/mimir.yaml:/etc/mimir.yaml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3300:3000"
+    volumes:
+      - "./monitoring/grafana/definitions:/var/lib/grafana/dashboards"
+      - "./monitoring/grafana/provisioning:/etc/grafana/provisioning"
+    depends_on:
+      - tempo
+      - loki
+      - mimir
