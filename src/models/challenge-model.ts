@@ -4,7 +4,7 @@ export type SeniorityLevel = 'junior' | 'intermediate' | 'senior';
 
 export type status = 'open' | 'ongoing' |'completed';
 
-export type category = 'design' | 'fronted' | 'backend' | 'fullstack';
+export type category = 'design' | 'frontend' | 'backend' | 'fullstack';
 
 export interface IChallenge extends Document{
     title: string
