@@ -467,7 +467,7 @@ components:
           type: string
           enum:
             - DESIGN
-            - FRONTED
+            - FRONTEND
             - BACKEND
             - FULLSTACK
           description: Challenge category
