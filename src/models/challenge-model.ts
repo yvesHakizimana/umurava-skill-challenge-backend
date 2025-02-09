@@ -43,7 +43,7 @@ const ChallengeSchema = new Schema<IChallenge>(
         category: {
             type: String,
             required: true,
-            enum: ['design','fronted', 'backend','fullstack'],
+            enum: ['design','frontend', 'backend','fullstack'],
         },
         seniorityLevel: {
             type: [String],
